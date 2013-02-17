@@ -58,40 +58,40 @@ func (c *Color) UnmapRgbaF() (float32, float32, float32, float32) {
 /*****************************/
 
 type LockedRegion struct {
-	data *byte
-	format int
-	pitch int
+	data      *byte
+	format    int
+	pitch     int
 	pixelSize int
 }
 
 const (
-	PixelFormatAny = C.ALLEGRO_PIXEL_FORMAT_ANY
-	PixelFormatAnyNoAlpha = C.ALLEGRO_PIXEL_FORMAT_ANY_NO_ALPHA
-	PixelFormatAnyWithAlpha = C.ALLEGRO_PIXEL_FORMAT_ANY_WITH_ALPHA
-	PixelFormatAny15NoAlpha = C.ALLEGRO_PIXEL_FORMAT_ANY_15_NO_ALPHA
-	PixelFormatAny16NoAlpha = C.ALLEGRO_PIXEL_FORMAT_ANY_16_NO_ALPHA
+	PixelFormatAny            = C.ALLEGRO_PIXEL_FORMAT_ANY
+	PixelFormatAnyNoAlpha     = C.ALLEGRO_PIXEL_FORMAT_ANY_NO_ALPHA
+	PixelFormatAnyWithAlpha   = C.ALLEGRO_PIXEL_FORMAT_ANY_WITH_ALPHA
+	PixelFormatAny15NoAlpha   = C.ALLEGRO_PIXEL_FORMAT_ANY_15_NO_ALPHA
+	PixelFormatAny16NoAlpha   = C.ALLEGRO_PIXEL_FORMAT_ANY_16_NO_ALPHA
 	PixelFormatAny16WithAlpha = C.ALLEGRO_PIXEL_FORMAT_ANY_16_WITH_ALPHA
-	PixelFormatAny24NoAlpha = C.ALLEGRO_PIXEL_FORMAT_ANY_24_NO_ALPHA
-	PixelFormatAny32NoAlpha = C.ALLEGRO_PIXEL_FORMAT_ANY_32_NO_ALPHA
+	PixelFormatAny24NoAlpha   = C.ALLEGRO_PIXEL_FORMAT_ANY_24_NO_ALPHA
+	PixelFormatAny32NoAlpha   = C.ALLEGRO_PIXEL_FORMAT_ANY_32_NO_ALPHA
 	PixelFormatAny32WithAlpha = C.ALLEGRO_PIXEL_FORMAT_ANY_32_WITH_ALPHA
-	PixelFormatArgb8888 = C.ALLEGRO_PIXEL_FORMAT_ARGB_8888
-	PixelFormatRgba8888 = C.ALLEGRO_PIXEL_FORMAT_RGBA_8888
-	PixelFormatArgb4444 = C.ALLEGRO_PIXEL_FORMAT_ARGB_4444
-	PixelFormatRgb888 = C.ALLEGRO_PIXEL_FORMAT_RGB_888
-	PixelFormatRgb565 = C.ALLEGRO_PIXEL_FORMAT_RGB_565
-	PixelFormatRgb555 = C.ALLEGRO_PIXEL_FORMAT_RGB_555
-	PixelFormatRgba5551 = C.ALLEGRO_PIXEL_FORMAT_RGBA_5551
-	PixelFormatArgb1555 = C.ALLEGRO_PIXEL_FORMAT_ARGB_1555
-	PixelFormatAbgr8888 = C.ALLEGRO_PIXEL_FORMAT_ABGR_8888
-	PixelFormatXbgr8888 = C.ALLEGRO_PIXEL_FORMAT_XBGR_8888
-	PixelFormatBgr888 = C.ALLEGRO_PIXEL_FORMAT_BGR_888
-	PixelFormatBgr565 = C.ALLEGRO_PIXEL_FORMAT_BGR_565
-	PixelFormatBgr555 = C.ALLEGRO_PIXEL_FORMAT_BGR_555
-	PixelFormatRgbx8888 = C.ALLEGRO_PIXEL_FORMAT_RGBX_8888
-	PixelFormatXrgb8888 = C.ALLEGRO_PIXEL_FORMAT_XRGB_8888
-	PixelFormatAbgrF32 = C.ALLEGRO_PIXEL_FORMAT_ABGR_F32
-	PixelFormatAbgr8888Le = C.ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE
-	PixelFormatRgba4444 = C.ALLEGRO_PIXEL_FORMAT_RGBA_4444
+	PixelFormatArgb8888       = C.ALLEGRO_PIXEL_FORMAT_ARGB_8888
+	PixelFormatRgba8888       = C.ALLEGRO_PIXEL_FORMAT_RGBA_8888
+	PixelFormatArgb4444       = C.ALLEGRO_PIXEL_FORMAT_ARGB_4444
+	PixelFormatRgb888         = C.ALLEGRO_PIXEL_FORMAT_RGB_888
+	PixelFormatRgb565         = C.ALLEGRO_PIXEL_FORMAT_RGB_565
+	PixelFormatRgb555         = C.ALLEGRO_PIXEL_FORMAT_RGB_555
+	PixelFormatRgba5551       = C.ALLEGRO_PIXEL_FORMAT_RGBA_5551
+	PixelFormatArgb1555       = C.ALLEGRO_PIXEL_FORMAT_ARGB_1555
+	PixelFormatAbgr8888       = C.ALLEGRO_PIXEL_FORMAT_ABGR_8888
+	PixelFormatXbgr8888       = C.ALLEGRO_PIXEL_FORMAT_XBGR_8888
+	PixelFormatBgr888         = C.ALLEGRO_PIXEL_FORMAT_BGR_888
+	PixelFormatBgr565         = C.ALLEGRO_PIXEL_FORMAT_BGR_565
+	PixelFormatBgr555         = C.ALLEGRO_PIXEL_FORMAT_BGR_555
+	PixelFormatRgbx8888       = C.ALLEGRO_PIXEL_FORMAT_RGBX_8888
+	PixelFormatXrgb8888       = C.ALLEGRO_PIXEL_FORMAT_XRGB_8888
+	PixelFormatAbgrF32        = C.ALLEGRO_PIXEL_FORMAT_ABGR_F32
+	PixelFormatAbgr8888Le     = C.ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE
+	PixelFormatRgba4444       = C.ALLEGRO_PIXEL_FORMAT_RGBA_4444
 )
 
 func GetPixelSize(format int) int {
@@ -109,7 +109,7 @@ func (b *Bitmap) LockBitmap(format, flags int) *LockedRegion {
 
 // flags
 const (
-	LockReadonly = C.ALLEGRO_LOCK_READONLY
+	LockReadonly  = C.ALLEGRO_LOCK_READONLY
 	LockWriteOnly = C.ALLEGRO_LOCK_WRITEONLY
 	LockReadWrite = C.ALLEGRO_LOCK_READWRITE
 )
@@ -157,15 +157,15 @@ func GetNewBitmapFormat() int {
 
 // flags
 const (
-	VideoBitmap = C.ALLEGRO_VIDEO_BITMAP
-	MemoryBitmap = C.ALLEGRO_MEMORY_BITMAP
-	KeepBitmapFormat = C.ALLEGRO_KEEP_BITMAP_FORMAT
-	ForceLocking = C.ALLEGRO_FORCE_LOCKING
-	NoPreserveTexture = C.ALLEGRO_NO_PRESERVE_TEXTURE
-	AlphaTest = C.ALLEGRO_ALPHA_TEST
-	MinLinear = C.ALLEGRO_MIN_LINEAR
-	MagLinear = C.ALLEGRO_MAG_LINEAR
-	Mipmap = C.ALLEGRO_MIPMAP
+	VideoBitmap          = C.ALLEGRO_VIDEO_BITMAP
+	MemoryBitmap         = C.ALLEGRO_MEMORY_BITMAP
+	KeepBitmapFormat     = C.ALLEGRO_KEEP_BITMAP_FORMAT
+	ForceLocking         = C.ALLEGRO_FORCE_LOCKING
+	NoPreserveTexture    = C.ALLEGRO_NO_PRESERVE_TEXTURE
+	AlphaTest            = C.ALLEGRO_ALPHA_TEST
+	MinLinear            = C.ALLEGRO_MIN_LINEAR
+	MagLinear            = C.ALLEGRO_MAG_LINEAR
+	Mipmap               = C.ALLEGRO_MIPMAP
 	NoPremultipliedAlpha = C.ALLEGRO_NO_PREMULTIPLIED_ALPHA
 )
 
@@ -231,7 +231,7 @@ func ClearToColor(c *Color) {
 // flags
 const (
 	FlipHorizontal = C.ALLEGRO_FLIP_HORIZONTAL
-	FlipVertical = C.ALLEGRO_FLIP_VERTICAL
+	FlipVertical   = C.ALLEGRO_FLIP_VERTICAL
 )
 
 func (b *Bitmap) DrawBitmap(dx, dy float32, flags int) {
@@ -373,13 +373,3 @@ func LoadBitmap(fileName string) *Bitmap {
 	defer C.free(unsafe.Pointer(f))
 	return &Bitmap{C.al_load_bitmap(f)}
 }
-
-/*
-	SKIPPED
-	
-	al_register_bitmap_loader
-	al_register_bitmap_saver
-	al_register_bitmap_loader_f
-	al_register_bitmap_saver_f
-	al_load_bitmap_f
-*/

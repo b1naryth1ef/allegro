@@ -54,12 +54,3 @@ func GetAppName() string {
 func GetOrgName() string {
 	return C.GoString(C.al_get_org_name())
 }
-
-/*
-	SKIPPED:
-	
-	al_install_system
-	al_get_standard_path
-	al_get_system_config
-	al_register_assert_handler
-*/

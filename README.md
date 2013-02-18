@@ -27,3 +27,7 @@ graphics.go
 * al_register_bitmap_loader_f
 * al_register_bitmap_saver_f
 * al_load_bitmap_f
+
+timer.go
+--------
+* al_get_timer_event_source

@@ -5,44 +5,20 @@ import "C"
 
 import "unsafe"
 
-/********************/
-/* Display Creation */
-/********************/
-
-type Display struct {
-	allegroDisplay *C.ALLEGRO_DISPLAY
-}
-
-func CreateDisplay(w, h int) *Display {
-	return &Display{C.al_create_display(C.int(w), C.int(h))}
-}
-
-func (d *Display) DestroyDisplay() {
-	C.al_destroy_display(d.allegroDisplay)
-}
-
-func GetNewDisplayFlags() int {
-	return int(C.al_get_new_display_flags())
-}
-
-func GetNewDisplayRefreshRate() int {
-	return int(C.al_get_new_display_refresh_rate())
-}
-
-func GetNewWindowPosition() (int, int) {
-	var x, y C.int
-	C.al_get_new_window_position(&x, &y)
-	return int(x), int(y)
-}
-
-// importance
 const (
-	Require  = C.ALLEGRO_REQUIRE
-	Suggest  = C.ALLEGRO_SUGGEST
-	DontCare = C.ALLEGRO_DONTCARE
+	Windowed                = C.ALLEGRO_WINDOWED
+	Fullscreen              = C.ALLEGRO_FULLSCREEN
+	FullscreenWindow        = C.ALLEGRO_FULLSCREEN_WINDOW
+	Resizable               = C.ALLEGRO_RESIZABLE
+	Opengl                  = C.ALLEGRO_OPENGL
+	Opengl30                = C.ALLEGRO_OPENGL_3_0
+	OpenglForwardCompatible = C.ALLEGRO_OPENGL_FORWARD_COMPATIBLE
+	//	Direct3d                = C.ALLEGRO_DIRECT3D
+	//	Frameless               = C.ALLEGRO_FRAMELESS
+	Noframe              = C.ALLEGRO_NOFRAME
+	GenerateExposeEvents = C.ALLEGRO_GENERATE_EXPOSE_EVENTS
 )
 
-// option
 const (
 	ColorSize               = C.ALLEGRO_COLOR_SIZE
 	RedSize                 = C.ALLEGRO_RED_SIZE
@@ -77,6 +53,42 @@ const (
 	SupportSeparateAlpha    = C.ALLEGRO_SUPPORT_SEPARATE_ALPHA
 )
 
+const (
+	Require  = C.ALLEGRO_REQUIRE
+	Suggest  = C.ALLEGRO_SUGGEST
+	DontCare = C.ALLEGRO_DONTCARE
+)
+
+/********************/
+/* Display Creation */
+/********************/
+
+type Display struct {
+	allegroDisplay *C.ALLEGRO_DISPLAY
+}
+
+func CreateDisplay(w, h int) *Display {
+	return &Display{C.al_create_display(C.int(w), C.int(h))}
+}
+
+func (d *Display) Destroy() {
+	C.al_destroy_display(d.allegroDisplay)
+}
+
+func GetNewDisplayFlags() int {
+	return int(C.al_get_new_display_flags())
+}
+
+func SetNewDisplayFlags(flags int) {
+	C.al_set_new_display_flags(C.int(flags))
+}
+
+func GetNewDisplayOption(option int) (int, int) {
+	var importance C.int
+	v := int(C.al_get_new_display_option(C.int(option), &importance))
+	return v, int(importance)
+}
+
 func SetNewDisplayOption(option, value, importance int) {
 	C.al_set_new_display_option(C.int(option), C.int(value), C.int(importance))
 }
@@ -85,107 +97,38 @@ func ResetNewDisplayOptions() {
 	C.al_reset_new_display_options()
 }
 
-// flags
-const (
-	Windowed                = C.ALLEGRO_WINDOWED
-	Fullscreen              = C.ALLEGRO_FULLSCREEN
-	FullscreenWindow        = C.ALLEGRO_FULLSCREEN_WINDOW
-	Resizable               = C.ALLEGRO_RESIZABLE
-	Opengl                  = C.ALLEGRO_OPENGL
-	Opengl30                = C.ALLEGRO_OPENGL_3_0
-	OpenglForwardCompatible = C.ALLEGRO_OPENGL_FORWARD_COMPATIBLE
-	//	Direct3d = C.ALLEGRO_DIRECT3D
-	//	Frameless = C.ALLEGRO_FRAMELESS
-	Noframe              = C.ALLEGRO_NOFRAME
-	GenerateExposeEvents = C.ALLEGRO_GENERATE_EXPOSE_EVENTS
-)
-
-func SetNewDisplayFlags(flags int) {
-	C.al_set_new_display_flags(C.int(flags))
-}
-
-func SetNewDisplayRefreshRate(refreshRate int) {
-	C.al_set_new_display_refresh_rate(C.int(refreshRate))
+func GetNewWindowPosition() (int, int) {
+	var x, y C.int
+	C.al_get_new_window_position(&x, &y)
+	return int(x), int(y)
 }
 
 func SetNewWindowPosition(x, y int) {
 	C.al_set_new_window_position(C.int(x), C.int(y))
 }
 
+func GetNewDisplayRefreshRate() int {
+	return int(C.al_get_new_display_refresh_rate())
+}
+
+func SetNewDisplayRefreshRate(refreshRate int) {
+	C.al_set_new_display_refresh_rate(C.int(refreshRate))
+}
+
 /**********************/
 /* Display Operations */
 /**********************/
 
-func (d *Display) AcknowledgeResize() bool {
-	return bool(C.al_acknowledge_resize(d.allegroDisplay))
-}
-
-func FlipDisplay() {
-	C.al_flip_display()
+func (d *Display) GetEventSource() *EventSource {
+	return &EventSource{C.al_get_display_event_source(d.allegroDisplay)}
 }
 
 func (d *Display) GetBackbuffer() *Bitmap {
 	return &Bitmap{C.al_get_backbuffer(d.allegroDisplay)}
 }
 
-func (d *Display) GetDisplayFlags() int {
-	return int(C.al_get_display_flags(d.allegroDisplay))
-}
-
-func (d *Display) GetDisplayFormat() int {
-	return int(C.al_get_display_format(d.allegroDisplay))
-}
-
-func (d *Display) GetDisplayHeight() int {
-	return int(C.al_get_display_height(d.allegroDisplay))
-}
-
-func (d *Display) GetDisplayRefreshRate() int {
-	return int(C.al_get_display_refresh_rate(d.allegroDisplay))
-}
-
-func (d *Display) GetDisplayWidth() int {
-	return int(C.al_get_display_width(d.allegroDisplay))
-}
-
-func (d *Display) GetWindowPosition() (int, int) {
-	var x, y C.int
-	C.al_get_window_position(d.allegroDisplay, &x, &y)
-	return int(x), int(y)
-}
-
-func InhibitScreensaver(inhibit bool) bool {
-	return bool(C.al_inhibit_screensaver(C.bool(inhibit)))
-}
-
-func (d *Display) ResizeDisplay(width, height int) bool {
-	return bool(C.al_resize_display(d.allegroDisplay, C.int(width), C.int(height)))
-}
-
-func (d *Display) SetDisplayIcon(icon *Bitmap) {
-	C.al_set_display_icon(d.allegroDisplay, icon.allegroBitmap)
-}
-
-func (d *Display) GetDisplayOption(option int) int {
-	return int(C.al_get_display_option(d.allegroDisplay, C.int(option)))
-}
-
-func (d *Display) SetWindowPosition(x, y int) {
-	C.al_set_window_position(d.allegroDisplay, C.int(x), C.int(y))
-}
-
-func (d *Display) SetWindowTitle(title string) {
-	t := C.CString(title)
-	defer C.free(unsafe.Pointer(t))
-	C.al_set_window_title(d.allegroDisplay, t)
-}
-
-//func (d *Display) SetDisplayFlag(flag int, onoff bool) bool {
-//	return bool(C.al_set_display_flag(d.allegroDisplay, C.int(flag), C.bool(onoff)))
-//}
-
-func (d *Display) ToggleDisplayFlag(flag int, onoff bool) bool {
-	return bool(C.al_toggle_display_flag(d.allegroDisplay, C.int(flag), C.bool(onoff)))
+func FlipDisplay() {
+	C.al_flip_display()
 }
 
 func UpdateDisplayRegion(x, y, width, height int) {
@@ -196,40 +139,82 @@ func WaitForVsync() bool {
 	return bool(C.al_wait_for_vsync())
 }
 
-/****************************/
-/* Fullscreen Display Modes */
-/****************************/
+/*****************************/
+/* Display Size and Position */
+/*****************************/
 
-type DisplayMode struct {
-	Width       int
-	Height      int
-	Format      int
-	RefreshRate int
+func (d *Display) GetWidth() int {
+	return int(C.al_get_display_width(d.allegroDisplay))
 }
 
-func GetNumDisplayModes() int {
-	return int(C.al_get_num_display_modes())
+func (d *Display) GetHeight() int {
+	return int(C.al_get_display_height(d.allegroDisplay))
 }
 
-/************/
-/* Monitors */
-/************/
-
-type MonitorInfo struct {
-	X1 int
-	Y1 int
-	X2 int
-	Y2 int
+func (d *Display) Resize(width, height int) bool {
+	return bool(C.al_resize_display(d.allegroDisplay, C.int(width), C.int(height)))
 }
 
-func GetNewDisplayAdapter() int {
-	return int(C.al_get_new_display_adapter())
+func (d *Display) AcknowledgeResize() bool {
+	return bool(C.al_acknowledge_resize(d.allegroDisplay))
 }
 
-func SetNewDisplayAdapter(adapter int) {
-	C.al_set_new_display_adapter(C.int(adapter))
+func (d *Display) GetWindowPosition() (int, int) {
+	var x, y C.int
+	C.al_get_window_position(d.allegroDisplay, &x, &y)
+	return int(x), int(y)
 }
 
-func GetNumVideoAdapters() int {
-	return int(C.al_get_num_video_adapters())
+func (d *Display) SetWindowPosition(x, y int) {
+	C.al_set_window_position(d.allegroDisplay, C.int(x), C.int(y))
+}
+
+/********************/
+/* Display Settings */
+/********************/
+
+func (d *Display) GetFlags() int {
+	return int(C.al_get_display_flags(d.allegroDisplay))
+}
+
+//func (d *Display) SetDisplayFlag(flag int, onoff bool) bool {
+//	return bool(C.al_set_display_flag(d.allegroDisplay, C.int(flag), C.bool(onoff)))
+//}
+
+func (d *Display) ToggleFlag(flag int, onoff bool) bool {
+	return bool(C.al_toggle_display_flag(d.allegroDisplay, C.int(flag), C.bool(onoff)))
+}
+
+func (d *Display) GetOption(option int) int {
+	return int(C.al_get_display_option(d.allegroDisplay, C.int(option)))
+}
+
+func (d *Display) GetFormat() int {
+	return int(C.al_get_display_format(d.allegroDisplay))
+}
+
+func (d *Display) GetRefreshRate() int {
+	return int(C.al_get_display_refresh_rate(d.allegroDisplay))
+}
+
+func (d *Display) SetWindowTitle(title string) {
+	t := C.CString(title)
+	defer C.free(unsafe.Pointer(t))
+	C.al_set_window_title(d.allegroDisplay, t)
+}
+
+func (d *Display) SetIcon(icon *Bitmap) {
+	C.al_set_display_icon(d.allegroDisplay, icon.allegroBitmap)
+}
+
+//func (d *Display) SetIcons(numIcons int, icons []*Bitmap) {
+//	C.al_set_display_icons(C.int(numIcons), icons.allegroBitmap)
+//}
+
+/***************/
+/* Screensaver */
+/***************/
+
+func InhibitScreensaver(inhibit bool) bool {
+	return bool(C.al_inhibit_screensaver(C.bool(inhibit)))
 }

@@ -283,7 +283,7 @@ func GetTargetBitmap() *Bitmap {
 	return &Bitmap{C.al_get_target_bitmap()}
 }
 
-func (b *Bitmap) SetTargetBitmap() {
+func (b *Bitmap) SetTarget() {
 	C.al_set_target_bitmap(b.allegroBitmap)
 }
 

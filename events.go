@@ -31,6 +31,10 @@ const (
 type Event struct {
 }
 
+type UserEvent struct {
+	allegroUserEvent *C.ALLEGRO_USER_EVENT
+}
+
 type EventQueue struct {
 	allegroEventQueue *C.ALLEGRO_EVENT_QUEUE
 }
@@ -43,7 +47,7 @@ func CreateEventQueue() *EventQueue {
 	return &EventQueue{C.al_create_event_queue()}
 }
 
-func (e *EventQueue) DestroyEventQueue() {
+func (e *EventQueue) Destroy() {
 	C.al_destroy_event_queue(e.allegroEventQueue)
 }
 
@@ -55,6 +59,20 @@ func (e *EventQueue) UnregisterEventSource(source *EventSource) {
 	C.al_unregister_event_source(e.allegroEventQueue, source.allegroEventSource)
 }
 
-func (e *EventQueue) IsEventQueueEmpty() bool {
+func (e *EventQueue) IsEmpty() bool {
 	return bool(C.al_is_event_queue_empty(e.allegroEventQueue))
 }
+
+func (e *EventQueue) GetNextEvent() bool, *Event {
+	// TODO
+}
+
+func (e *EventQueue) PeekNextEvent() bool, *Event {
+	// TODO
+}
+
+func (e *EventQueue) DropNextEvent() bool {
+	return bool(C.al_drop_next_event(e.allegroEventQueue))
+}
+
+

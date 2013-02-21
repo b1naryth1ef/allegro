@@ -7,3 +7,4 @@ TODO
 ====
 * int -> int32
 * C.free(unsafe.Pointer)
+* Return correct nil values for opaque structs

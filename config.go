@@ -22,11 +22,7 @@ func (c *Config) Destroy() {
 func LoadConfigFile(fileName string) *Config {
 	f := C.CString(fileName)
 	defer C.free(unsafe.Pointer(f))
-	r := C.al_load_config_file(f)
-	if r == nil {
-		return nil
-	}
-	return (*Config)(unsafe.Pointer(r))
+	return (*Config)(unsafe.Pointer(C.al_load_config_file(f)))
 }
 
 func (c *Config) SaveFile(fileName string) bool {

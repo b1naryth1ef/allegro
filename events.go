@@ -106,9 +106,7 @@ type Event struct {
 	User     UserEvent
 }
 
-type EventSource struct {
-	pad [32]int32
-}
+type EventSource C.ALLEGRO_EVENT_SOURCE
 
 type EventQueue C.ALLEGRO_EVENT_QUEUE
 

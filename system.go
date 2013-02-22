@@ -20,7 +20,7 @@ func Init() bool {
 	return bool(C.al_install_system(C.ALLEGRO_VERSION_INT, nil))
 }
 
-func InstallSystem(version int) bool {
+func InstallSystem(version int32) bool {
 	return bool(C.al_install_system(C.int(version), nil))
 }
 
@@ -36,8 +36,8 @@ func GetAllegroVersion() uint32 {
 	return uint32(C.al_get_allegro_version())
 }
 
-func GetStandardPath(id int) *Path {
-	return &Path{C.al_get_standard_path(C.int(id))}
+func GetStandardPath(id int32) *Path {
+	return (*Path)(unsafe.Pointer(C.al_get_standard_path(C.int(id))))
 }
 
 //func SetExeName(string path) {
@@ -67,5 +67,5 @@ func SetOrgName(orgName string) {
 }
 
 func GetSystemConfig() *Config {
-	return &Config{C.al_get_system_config()}
+	return (*Config)(unsafe.Pointer(C.al_get_system_config()))
 }

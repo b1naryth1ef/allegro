@@ -63,33 +63,31 @@ const (
 /* Display Creation */
 /********************/
 
-type Display struct {
-	allegroDisplay *C.ALLEGRO_DISPLAY
-}
+type Display C.ALLEGRO_DISPLAY
 
-func CreateDisplay(w, h int) *Display {
-	return &Display{C.al_create_display(C.int(w), C.int(h))}
+func CreateDisplay(w, h int32) *Display {
+	return (*Display)(unsafe.Pointer(C.al_create_display(C.int(w), C.int(h))))
 }
 
 func (d *Display) Destroy() {
-	C.al_destroy_display(d.allegroDisplay)
+	C.al_destroy_display((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)))
 }
 
-func GetNewDisplayFlags() int {
-	return int(C.al_get_new_display_flags())
+func GetNewDisplayFlags() int32 {
+	return int32(C.al_get_new_display_flags())
 }
 
-func SetNewDisplayFlags(flags int) {
+func SetNewDisplayFlags(flags int32) {
 	C.al_set_new_display_flags(C.int(flags))
 }
 
-func GetNewDisplayOption(option int) (int, int) {
+func GetNewDisplayOption(option int32) (int32, int32) {
 	var importance C.int
-	v := int(C.al_get_new_display_option(C.int(option), &importance))
-	return v, int(importance)
+	v := int32(C.al_get_new_display_option(C.int(option), &importance))
+	return v, int32(importance)
 }
 
-func SetNewDisplayOption(option, value, importance int) {
+func SetNewDisplayOption(option, value, importance int32) {
 	C.al_set_new_display_option(C.int(option), C.int(value), C.int(importance))
 }
 
@@ -97,21 +95,21 @@ func ResetNewDisplayOptions() {
 	C.al_reset_new_display_options()
 }
 
-func GetNewWindowPosition() (int, int) {
+func GetNewWindowPosition() (int32, int32) {
 	var x, y C.int
 	C.al_get_new_window_position(&x, &y)
-	return int(x), int(y)
+	return int32(x), int32(y)
 }
 
-func SetNewWindowPosition(x, y int) {
+func SetNewWindowPosition(x, y int32) {
 	C.al_set_new_window_position(C.int(x), C.int(y))
 }
 
-func GetNewDisplayRefreshRate() int {
-	return int(C.al_get_new_display_refresh_rate())
+func GetNewDisplayRefreshRate() int32 {
+	return int32(C.al_get_new_display_refresh_rate())
 }
 
-func SetNewDisplayRefreshRate(refreshRate int) {
+func SetNewDisplayRefreshRate(refreshRate int32) {
 	C.al_set_new_display_refresh_rate(C.int(refreshRate))
 }
 
@@ -120,18 +118,18 @@ func SetNewDisplayRefreshRate(refreshRate int) {
 /**********************/
 
 func (d *Display) GetEventSource() *EventSource {
-	return &EventSource{C.al_get_display_event_source(d.allegroDisplay)}
+	return (*EventSource)(unsafe.Pointer(C.al_get_display_event_source((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)))))
 }
 
 func (d *Display) GetBackbuffer() *Bitmap {
-	return &Bitmap{C.al_get_backbuffer(d.allegroDisplay)}
+	return (*Bitmap)(unsafe.Pointer(C.al_get_backbuffer((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)))))
 }
 
 func FlipDisplay() {
 	C.al_flip_display()
 }
 
-func UpdateDisplayRegion(x, y, width, height int) {
+func UpdateDisplayRegion(x, y, width, height int32) {
 	C.al_update_display_region(C.int(x), C.int(y), C.int(width), C.int(height))
 }
 
@@ -143,72 +141,72 @@ func WaitForVsync() bool {
 /* Display Size and Position */
 /*****************************/
 
-func (d *Display) GetWidth() int {
-	return int(C.al_get_display_width(d.allegroDisplay))
+func (d *Display) GetWidth() int32 {
+	return int32(C.al_get_display_width((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d))))
 }
 
-func (d *Display) GetHeight() int {
-	return int(C.al_get_display_height(d.allegroDisplay))
+func (d *Display) GetHeight() int32 {
+	return int32(C.al_get_display_height((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d))))
 }
 
-func (d *Display) Resize(width, height int) bool {
-	return bool(C.al_resize_display(d.allegroDisplay, C.int(width), C.int(height)))
+func (d *Display) Resize(width, height int32) bool {
+	return bool(C.al_resize_display((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), C.int(width), C.int(height)))
 }
 
 func (d *Display) AcknowledgeResize() bool {
-	return bool(C.al_acknowledge_resize(d.allegroDisplay))
+	return bool(C.al_acknowledge_resize((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d))))
 }
 
-func (d *Display) GetWindowPosition() (int, int) {
+func (d *Display) GetWindowPosition() (int32, int32) {
 	var x, y C.int
-	C.al_get_window_position(d.allegroDisplay, &x, &y)
-	return int(x), int(y)
+	C.al_get_window_position((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), &x, &y)
+	return int32(x), int32(y)
 }
 
-func (d *Display) SetWindowPosition(x, y int) {
-	C.al_set_window_position(d.allegroDisplay, C.int(x), C.int(y))
+func (d *Display) SetWindowPosition(x, y int32) {
+	C.al_set_window_position((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), C.int(x), C.int(y))
 }
 
 /********************/
 /* Display Settings */
 /********************/
 
-func (d *Display) GetFlags() int {
-	return int(C.al_get_display_flags(d.allegroDisplay))
+func (d *Display) GetFlags() int32 {
+	return int32(C.al_get_display_flags((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d))))
 }
 
 //func (d *Display) SetDisplayFlag(flag int, onoff bool) bool {
-//	return bool(C.al_set_display_flag(d.allegroDisplay, C.int(flag), C.bool(onoff)))
+//	return bool(C.al_set_display_flag((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), C.int(flag), C.bool(onoff)))
 //}
 
-func (d *Display) ToggleFlag(flag int, onoff bool) bool {
-	return bool(C.al_toggle_display_flag(d.allegroDisplay, C.int(flag), C.bool(onoff)))
+func (d *Display) ToggleFlag(flag int32, onoff bool) bool {
+	return bool(C.al_toggle_display_flag((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), C.int(flag), C.bool(onoff)))
 }
 
-func (d *Display) GetOption(option int) int {
-	return int(C.al_get_display_option(d.allegroDisplay, C.int(option)))
+func (d *Display) GetOption(option int32) int32 {
+	return int32(C.al_get_display_option((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), C.int(option)))
 }
 
-func (d *Display) GetFormat() int {
-	return int(C.al_get_display_format(d.allegroDisplay))
+func (d *Display) GetFormat() int32 {
+	return int32(C.al_get_display_format((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d))))
 }
 
-func (d *Display) GetRefreshRate() int {
-	return int(C.al_get_display_refresh_rate(d.allegroDisplay))
+func (d *Display) GetRefreshRate() int32 {
+	return int32(C.al_get_display_refresh_rate((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d))))
 }
 
 func (d *Display) SetWindowTitle(title string) {
 	t := C.CString(title)
 	defer C.free(unsafe.Pointer(t))
-	C.al_set_window_title(d.allegroDisplay, t)
+	C.al_set_window_title((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), t)
 }
 
 func (d *Display) SetIcon(icon *Bitmap) {
-	C.al_set_display_icon(d.allegroDisplay, icon.allegroBitmap)
+	C.al_set_display_icon((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), (*C.ALLEGRO_BITMAP)(unsafe.Pointer(icon)))
 }
 
 //func (d *Display) SetIcons(numIcons int, icons []*Bitmap) {
-//	C.al_set_display_icons(C.int(numIcons), icons.allegroBitmap)
+//	C.al_set_display_icons(C.int(numIcons), (*C.ALLEGRO_BITMAP)(unsafe.Pointer(icon)))
 //}
 
 /***************/

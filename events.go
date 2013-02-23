@@ -95,6 +95,7 @@ type UserEvent struct {
 	Data4         uintptr
 }
 
+// TODO fix the var names (they are types)
 type Event struct {
 	Type     uint32
 	Any      AnyEvent

@@ -14,7 +14,7 @@ const (
 	Opengl30                = C.ALLEGRO_OPENGL_3_0
 	OpenglForwardCompatible = C.ALLEGRO_OPENGL_FORWARD_COMPATIBLE
 	//	Direct3d                = C.ALLEGRO_DIRECT3D
-	//	Frameless               = C.ALLEGRO_FRAMELESS
+	Frameless            = C.ALLEGRO_FRAMELESS
 	Noframe              = C.ALLEGRO_NOFRAME
 	GenerateExposeEvents = C.ALLEGRO_GENERATE_EXPOSE_EVENTS
 )
@@ -175,12 +175,8 @@ func (d *Display) GetFlags() int32 {
 	return int32(C.al_get_display_flags((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d))))
 }
 
-//func (d *Display) SetDisplayFlag(flag int, onoff bool) bool {
-//	return bool(C.al_set_display_flag((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), C.int(flag), C.bool(onoff)))
-//}
-
-func (d *Display) ToggleFlag(flag int32, onoff bool) bool {
-	return bool(C.al_toggle_display_flag((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), C.int(flag), C.bool(onoff)))
+func (d *Display) SetDisplayFlag(flag int, onoff bool) bool {
+	return bool(C.al_set_display_flag((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), C.int(flag), C.bool(onoff)))
 }
 
 func (d *Display) GetOption(option int32) int32 {
@@ -205,8 +201,8 @@ func (d *Display) SetIcon(icon *Bitmap) {
 	C.al_set_display_icon((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), (*C.ALLEGRO_BITMAP)(unsafe.Pointer(icon)))
 }
 
-//func (d *Display) SetIcons(numIcons int, icons []*Bitmap) {
-//	C.al_set_display_icons(C.int(numIcons), (*C.ALLEGRO_BITMAP)(unsafe.Pointer(icon)))
+//func (d *Display) SetIcons(numIcons int, icons [](*Bitmap)) {
+//	C.al_set_display_icons(C.int(numIcons), [](*C.ALLEGRO_BITMAP)(icons))
 //}
 
 /***************/

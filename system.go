@@ -1,6 +1,6 @@
 package allegro
 
-// #cgo pkg-config: allegro-5.0
+// #cgo LDFLAGS: -lallegro
 // #include <allegro5/allegro.h>
 import "C"
 

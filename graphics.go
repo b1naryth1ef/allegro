@@ -216,9 +216,9 @@ func (b *Bitmap) IsSub() bool {
 	return bool(C.al_is_sub_bitmap((*C.ALLEGRO_BITMAP)(unsafe.Pointer(b))))
 }
 
-//func (b *Bitmap) GetParent() *Bitmap {
-//	return (*Bitmap)(unsafe.Pointer(C.al_get_parent_bitmap((*C.ALLEGRO_BITMAP)(unsafe.Pointer(b)))))
-//}
+func (b *Bitmap) GetParent() *Bitmap {
+	return (*Bitmap)(unsafe.Pointer(C.al_get_parent_bitmap((*C.ALLEGRO_BITMAP)(unsafe.Pointer(b)))))
+}
 
 /**********************/
 /* Drawing Operations */
@@ -263,9 +263,9 @@ func (b *Bitmap) DrawTintedScaledRotated(c Color, cx, cy, dx, dy, xscale, yscale
 	C.al_draw_tinted_scaled_rotated_bitmap((*C.ALLEGRO_BITMAP)(unsafe.Pointer(b)), (C.ALLEGRO_COLOR)(c), C.float(cx), C.float(cy), C.float(dx), C.float(dy), C.float(xscale), C.float(yscale), C.float(angle), C.int(flags))
 }
 
-//func (b *Bitmap) DrawTintedScaledRotatedRegion(sx, sy, sw, sh float32, c Color, cx, cy, dx, dy, xscale, yscale, angle float32, flags int) {
-//	C.al_draw_tinted_scaled_rotated_bitmap_region((*C.ALLEGRO_BITMAP)(unsafe.Pointer(b)), C.float(sx), C.float(sy), C.float(sw), C.float(sh), (C.ALLEGRO_COLOR)(c), C.float(cx), C.float(cy), C.float(dx), C.float(dy), C.float(xscale), C.float(yscale), C.float(angle), C.int(flags))
-//}
+func (b *Bitmap) DrawTintedScaledRotatedRegion(sx, sy, sw, sh float32, c Color, cx, cy, dx, dy, xscale, yscale, angle float32, flags int) {
+	C.al_draw_tinted_scaled_rotated_bitmap_region((*C.ALLEGRO_BITMAP)(unsafe.Pointer(b)), C.float(sx), C.float(sy), C.float(sw), C.float(sh), (C.ALLEGRO_COLOR)(c), C.float(cx), C.float(cy), C.float(dx), C.float(dy), C.float(xscale), C.float(yscale), C.float(angle), C.int(flags))
+}
 
 func (b *Bitmap) DrawScaled(sx, sy, sw, sh, dx, dy, dw, dh float32, flags int32) {
 	C.al_draw_scaled_bitmap((*C.ALLEGRO_BITMAP)(unsafe.Pointer(b)), C.float(sx), C.float(sy), C.float(sw), C.float(sh), C.float(dx), C.float(dy), C.float(dw), C.float(dh), C.int(flags))
@@ -337,9 +337,9 @@ func SetClippingRectangle(x, y, w, h int32) {
 	C.al_set_clipping_rectangle(C.int(x), C.int(y), C.int(w), C.int(h))
 }
 
-//func ResetClippingRectangle() {
-//	C.al_reset_clipping_rectangle()
-//}
+func ResetClippingRectangle() {
+	C.al_reset_clipping_rectangle()
+}
 
 /******************************/
 /* Graphics Utility Functions */

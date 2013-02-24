@@ -147,9 +147,9 @@ func (e *EventQueue) DropNextEvent() bool {
 	return bool(C.al_drop_next_event((*C.ALLEGRO_EVENT_QUEUE)(unsafe.Pointer(e))))
 }
 
-//func (e *EventQueue) Flush() bool {
-//	return bool(C.al_flush_event_queue((*C.ALLEGRO_EVENT_QUEUE)(unsafe.Pointer(e))))
-//}
+func (e *EventQueue) Flush() {
+	C.al_flush_event_queue((*C.ALLEGRO_EVENT_QUEUE)(unsafe.Pointer(e)))
+}
 
 func (e *EventQueue) WaitForEvent() *Event {
 	ev := new(Event)

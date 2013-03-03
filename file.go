@@ -5,14 +5,6 @@ import "C"
 
 import "unsafe"
 
-const (
-	SeekSet = C.ALLEGRO_SEEK_SET
-	SeekCur = C.ALLEGRO_SEEK_CUR
-	SeekEnd = C.ALLEGRO_SEEK_END
-)
-
-type File C.ALLEGRO_FILE
-
 func Fopen(path, mode string) *File {
 	p := C.CString(path)
 	defer C.free(unsafe.Pointer(p))
@@ -31,12 +23,12 @@ func (f *File) Fclose() {
 	C.al_fclose((*C.ALLEGRO_FILE)(unsafe.Pointer(f)))
 }
 
-func (f *File) Fread(ptr uintptr, size uint32) uint32 {
-	return uint32(C.al_fread((*C.ALLEGRO_FILE)(unsafe.Pointer(f)), unsafe.Pointer(ptr), C.size_t(size)))
+func (f *File) Fread(ptr unsafe.Pointer, size uint32) uint32 {
+	return uint32(C.al_fread((*C.ALLEGRO_FILE)(unsafe.Pointer(f)), ptr, C.size_t(size)))
 }
 
-func (f *File) Fwrite(ptr uintptr, size uint32) uint32 {
-	return uint32(C.al_fwrite((*C.ALLEGRO_FILE)(unsafe.Pointer(f)), unsafe.Pointer(ptr), C.size_t(size)))
+func (f *File) Fwrite(ptr unsafe.Pointer, size uint32) uint32 {
+	return uint32(C.al_fwrite((*C.ALLEGRO_FILE)(unsafe.Pointer(f)), ptr, C.size_t(size)))
 }
 
 func (f *File) Fflush() bool {

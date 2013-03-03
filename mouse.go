@@ -5,42 +5,6 @@ import "C"
 
 import "unsafe"
 
-const (
-	SystemMouseCursorNone        = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_NONE
-	SystemMouseCursorDefault     = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT
-	SystemMouseCursorArrow       = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_ARROW
-	SystemMouseCursorBusy        = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_BUSY
-	SystemMouseCursorQuestion    = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_QUESTION
-	SystemMouseCursorEdit        = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_EDIT
-	SystemMouseCursorMove        = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_MOVE
-	SystemMouseCursorResizeN     = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_N
-	SystemMouseCursorResizeW     = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_W
-	SystemMouseCursorResizeS     = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_S
-	SystemMouseCursorResizeE     = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_E
-	SystemMouseCursorResizeNW    = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_NW
-	SystemMouseCursorResizeSW    = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_SW
-	SystemMouseCursorResizeSE    = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_SE
-	SystemMouseCursorResizeNE    = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_NE
-	SystemMouseCursorProgress    = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_PROGRESS
-	SystemMouseCursorPrecision   = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_PRECISION
-	SystemMouseCursorLink        = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_LINK
-	SystemMouseCursorSelect      = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_ALT_SELECT
-	SystemMouseCursorUnavailable = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_UNAVAILABLE
-)
-
-type Mouse C.ALLEGRO_MOUSE
-
-type MouseState struct {
-	X        int32
-	Y        int32
-	Z        int32
-	W        int32
-	moreAxes [C.ALLEGRO_MOUSE_MAX_EXTRA_AXES]int32
-	Buttons  int32
-	pressure int32
-	disp     *Display
-}
-
 func InstallMouse() bool {
 	return bool(C.al_install_mouse())
 }
@@ -75,7 +39,7 @@ func (m *MouseState) ButtonDown(button int32) bool {
 	return bool(C.al_mouse_button_down((*C.ALLEGRO_MOUSE_STATE)(unsafe.Pointer(m)), C.int(button)))
 }
 
-func (d *Display) SetMouseXY(x, y int32) bool {
+func (d *Display) SetMouseXy(x, y int32) bool {
 	return bool(C.al_set_mouse_xy((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), C.int(x), C.int(y)))
 }
 
@@ -98,8 +62,6 @@ func GetMouseEventSource() *EventSource {
 /*****************/
 /* Mouse Cursors */
 /*****************/
-
-type MouseCursor C.ALLEGRO_MOUSE_CURSOR
 
 func CreateMouseCursor(bmp *Bitmap, xFocus, yFocus int32) *MouseCursor {
 	return (*MouseCursor)(unsafe.Pointer(C.al_create_mouse_cursor((*C.ALLEGRO_BITMAP)(unsafe.Pointer(bmp)), C.int(xFocus), C.int(yFocus))))

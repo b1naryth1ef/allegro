@@ -5,8 +5,6 @@ import "C"
 
 import "unsafe"
 
-type Timer C.ALLEGRO_TIMER
-
 func CreateTimer(speedSecs float64) *Timer {
 	return (*Timer)(unsafe.Pointer(C.al_create_timer(C.double(speedSecs))))
 }
@@ -23,7 +21,7 @@ func (t *Timer) Stop() {
 	C.al_stop_timer((*C.ALLEGRO_TIMER)(unsafe.Pointer(t)))
 }
 
-func (t *Timer) IsStarted() bool {
+func (t *Timer) GetStarted() bool {
 	return bool(C.al_get_timer_started((*C.ALLEGRO_TIMER)(unsafe.Pointer(t))))
 }
 

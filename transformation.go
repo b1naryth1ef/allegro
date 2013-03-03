@@ -5,10 +5,6 @@ import "C"
 
 import "unsafe"
 
-type Transform struct {
-	M [4][4]float32
-}
-
 func (t *Transform) Copy() *Transform {
 	ts := new(C.ALLEGRO_TRANSFORM)
 	C.al_copy_transform((*C.ALLEGRO_TRANSFORM)(unsafe.Pointer(t)), ts)
@@ -84,6 +80,10 @@ func (t *Transform) Scale3d(sx, sy, sz float32) {
 
 func (t *Transform) Rotate3d(x, y, z, angle float32) {
 	C.al_rotate_transform_3d((*C.ALLEGRO_TRANSFORM)(unsafe.Pointer(t)), C.float(x), C.float(y), C.float(z), C.float(angle))
+}
+
+func GetProjection(display *Display) *Transform {
+	return (*Transform)(unsafe.Pointer(C.al_get_projection_transform((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(display)))))
 }
 
 func (t *Transform) SetProjection(display *Display) {

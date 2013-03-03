@@ -5,22 +5,6 @@ import "C"
 
 import "unsafe"
 
-const TouchInputMaxTouchCount = C.ALLEGRO_TOUCH_INPUT_MAX_TOUCH_COUNT
-
-const (
-	MouseEmulationNone        = C.ALLEGRO_MOUSE_EMULATION_NONE
-	MouseEmulationTransparent = C.ALLEGRO_MOUSE_EMULATION_TRANSPARENT
-	MouseEmulationInclusive   = C.ALLEGRO_MOUSE_EMULATION_INCLUSIVE
-	MouseEmulationExclusive   = C.ALLEGRO_MOUSE_EMULATION_EXCLUSIVE
-	MouseEmulation50X         = C.ALLEGRO_MOUSE_EMULATION_5_0_x
-)
-
-type TouchInput C.ALLEGRO_TOUCH_INPUT
-
-type TouchState C.ALLEGRO_TOUCH_STATE
-
-type TouchInputState C.ALLEGRO_TOUCH_INPUT_STATE
-
 func InstallTouchInput() bool {
 	return bool(C.al_install_touch_input())
 }

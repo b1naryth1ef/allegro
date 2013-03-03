@@ -5,65 +5,9 @@ import "C"
 
 import "unsafe"
 
-const (
-	PixelFormatAny            = C.ALLEGRO_PIXEL_FORMAT_ANY
-	PixelFormatAnyNoAlpha     = C.ALLEGRO_PIXEL_FORMAT_ANY_NO_ALPHA
-	PixelFormatAnyWithAlpha   = C.ALLEGRO_PIXEL_FORMAT_ANY_WITH_ALPHA
-	PixelFormatAny15NoAlpha   = C.ALLEGRO_PIXEL_FORMAT_ANY_15_NO_ALPHA
-	PixelFormatAny16NoAlpha   = C.ALLEGRO_PIXEL_FORMAT_ANY_16_NO_ALPHA
-	PixelFormatAny16WithAlpha = C.ALLEGRO_PIXEL_FORMAT_ANY_16_WITH_ALPHA
-	PixelFormatAny24NoAlpha   = C.ALLEGRO_PIXEL_FORMAT_ANY_24_NO_ALPHA
-	PixelFormatAny32NoAlpha   = C.ALLEGRO_PIXEL_FORMAT_ANY_32_NO_ALPHA
-	PixelFormatAny32WithAlpha = C.ALLEGRO_PIXEL_FORMAT_ANY_32_WITH_ALPHA
-	PixelFormatArgb8888       = C.ALLEGRO_PIXEL_FORMAT_ARGB_8888
-	PixelFormatRgba8888       = C.ALLEGRO_PIXEL_FORMAT_RGBA_8888
-	PixelFormatArgb4444       = C.ALLEGRO_PIXEL_FORMAT_ARGB_4444
-	PixelFormatRgb888         = C.ALLEGRO_PIXEL_FORMAT_RGB_888
-	PixelFormatRgb565         = C.ALLEGRO_PIXEL_FORMAT_RGB_565
-	PixelFormatRgb555         = C.ALLEGRO_PIXEL_FORMAT_RGB_555
-	PixelFormatRgba5551       = C.ALLEGRO_PIXEL_FORMAT_RGBA_5551
-	PixelFormatArgb1555       = C.ALLEGRO_PIXEL_FORMAT_ARGB_1555
-	PixelFormatAbgr8888       = C.ALLEGRO_PIXEL_FORMAT_ABGR_8888
-	PixelFormatXbgr8888       = C.ALLEGRO_PIXEL_FORMAT_XBGR_8888
-	PixelFormatBgr888         = C.ALLEGRO_PIXEL_FORMAT_BGR_888
-	PixelFormatBgr565         = C.ALLEGRO_PIXEL_FORMAT_BGR_565
-	PixelFormatBgr555         = C.ALLEGRO_PIXEL_FORMAT_BGR_555
-	PixelFormatRgbx8888       = C.ALLEGRO_PIXEL_FORMAT_RGBX_8888
-	PixelFormatXrgb8888       = C.ALLEGRO_PIXEL_FORMAT_XRGB_8888
-	PixelFormatAbgrF32        = C.ALLEGRO_PIXEL_FORMAT_ABGR_F32
-	PixelFormatAbgr8888Le     = C.ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE
-	PixelFormatRgba4444       = C.ALLEGRO_PIXEL_FORMAT_RGBA_4444
-)
-
-const (
-	LockReadonly  = C.ALLEGRO_LOCK_READONLY
-	LockWriteOnly = C.ALLEGRO_LOCK_WRITEONLY
-	LockReadWrite = C.ALLEGRO_LOCK_READWRITE
-)
-
-const (
-	VideoBitmap          = C.ALLEGRO_VIDEO_BITMAP
-	MemoryBitmap         = C.ALLEGRO_MEMORY_BITMAP
-	KeepBitmapFormat     = C.ALLEGRO_KEEP_BITMAP_FORMAT
-	ForceLocking         = C.ALLEGRO_FORCE_LOCKING
-	NoPreserveTexture    = C.ALLEGRO_NO_PRESERVE_TEXTURE
-	AlphaTest            = C.ALLEGRO_ALPHA_TEST
-	MinLinear            = C.ALLEGRO_MIN_LINEAR
-	MagLinear            = C.ALLEGRO_MAG_LINEAR
-	Mipmap               = C.ALLEGRO_MIPMAP
-	NoPremultipliedAlpha = C.ALLEGRO_NO_PREMULTIPLIED_ALPHA
-)
-
-const (
-	FlipHorizontal = C.ALLEGRO_FLIP_HORIZONTAL
-	FlipVertical   = C.ALLEGRO_FLIP_VERTICAL
-)
-
 /**********/
 /* Colors */
 /**********/
-
-type Color C.ALLEGRO_COLOR
 
 func MapRgb(r uint8, g uint8, b uint8) Color {
 	return (Color)(C.al_map_rgb(C.uchar(r), C.uchar(g), C.uchar(b)))
@@ -109,13 +53,6 @@ func (c Color) UnmapRgbaF() (float32, float32, float32, float32) {
 /* Locking and Pixel Formats */
 /*****************************/
 
-type LockedRegion struct {
-	Data      uintptr
-	Format    int32
-	Pitch     int32
-	PixelSize int32
-}
-
 func GetPixelSize(format int32) int32 {
 	return int32(C.al_get_pixel_size(C.int(format)))
 }
@@ -142,8 +79,6 @@ func (b *Bitmap) Unlock() {
 /* Bitmap Creation */
 /*******************/
 
-type Bitmap C.ALLEGRO_BITMAP
-
 func CreateBitmap(w, h int32) *Bitmap {
 	return (*Bitmap)(unsafe.Pointer(C.al_create_bitmap(C.int(w), C.int(h))))
 }
@@ -160,12 +95,16 @@ func (b *Bitmap) Clone() *Bitmap {
 	return (*Bitmap)(unsafe.Pointer(C.al_clone_bitmap((*C.ALLEGRO_BITMAP)(unsafe.Pointer(b)))))
 }
 
-func GetNewBitmapFlags() int32 {
-	return int32(C.al_get_new_bitmap_flags())
+func (b *Bitmap) Convert() {
+	C.al_convert_bitmap((*C.ALLEGRO_BITMAP)(unsafe.Pointer(b)))
 }
 
-func GetNewBitmapFormat() int32 {
-	return int32(C.al_get_new_bitmap_format())
+func ConvertBitmaps() {
+	C.al_convert_bitmaps()
+}
+
+func GetNewBitmapFlags() int32 {
+	return int32(C.al_get_new_bitmap_flags())
 }
 
 func SetNewBitmapFlags(flags int32) {
@@ -174,6 +113,10 @@ func SetNewBitmapFlags(flags int32) {
 
 func AddNewBitmapFlag(flag int32) {
 	C.al_add_new_bitmap_flag(C.int(flag))
+}
+
+func GetNewBitmapFormat() int32 {
+	return int32(C.al_get_new_bitmap_format())
 }
 
 func SetNewBitmapFormat(format int32) {
@@ -225,6 +168,10 @@ func (b *Bitmap) GetParent() *Bitmap {
 /**********************/
 func ClearToColor(c Color) {
 	C.al_clear_to_color((C.ALLEGRO_COLOR)(c))
+}
+
+func ClearDepthBuffer(z float32) {
+	C.al_clear_depth_buffer(C.float(z))
 }
 
 func (b *Bitmap) Draw(dx, dy float32, flags int32) {
@@ -371,8 +318,34 @@ func LoadBitmap(fileName string) *Bitmap {
 	return (*Bitmap)(unsafe.Pointer(C.al_load_bitmap(f)))
 }
 
+func LoadBitmapF(fp *File, ident string) *Bitmap {
+	i := C.CString(ident)
+	defer C.free(unsafe.Pointer(i))
+	return (*Bitmap)(unsafe.Pointer(C.al_load_bitmap_f((*C.ALLEGRO_FILE)(unsafe.Pointer(fp)), i)))
+}
+
+func LoadBitmapFlagsF(fp *File, ident string, flags int32) *Bitmap {
+	i := C.CString(ident)
+	defer C.free(unsafe.Pointer(i))
+	return (*Bitmap)(unsafe.Pointer(C.al_load_bitmap_flags_f((*C.ALLEGRO_FILE)(unsafe.Pointer(fp)), i, C.int(flags))))
+}
+
 func (b *Bitmap) Save(fileName string) bool {
 	f := C.CString(fileName)
 	defer C.free(unsafe.Pointer(f))
 	return bool(C.al_save_bitmap(f, (*C.ALLEGRO_BITMAP)(unsafe.Pointer(b))))
+}
+
+func (b *Bitmap) SaveF(fp *File, ident string) bool {
+	i := C.CString(ident)
+	defer C.free(unsafe.Pointer(i))
+	return bool(C.al_save_bitmap_f((*C.ALLEGRO_FILE)(unsafe.Pointer(fp)), i, (*C.ALLEGRO_BITMAP)(unsafe.Pointer(b))))
+}
+
+/****************/
+/* Render State */
+/****************/
+
+func SetRenderState(state uint32, value int32) {
+	C.al_set_render_state(C.ALLEGRO_RENDER_STATE(state), C.int(value))
 }

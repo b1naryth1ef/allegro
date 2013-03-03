@@ -5,65 +5,9 @@ import "C"
 
 import "unsafe"
 
-const (
-	Windowed                = C.ALLEGRO_WINDOWED
-	Fullscreen              = C.ALLEGRO_FULLSCREEN
-	FullscreenWindow        = C.ALLEGRO_FULLSCREEN_WINDOW
-	Resizable               = C.ALLEGRO_RESIZABLE
-	Opengl                  = C.ALLEGRO_OPENGL
-	Opengl30                = C.ALLEGRO_OPENGL_3_0
-	OpenglForwardCompatible = C.ALLEGRO_OPENGL_FORWARD_COMPATIBLE
-	//	Direct3d                = C.ALLEGRO_DIRECT3D
-	Frameless            = C.ALLEGRO_FRAMELESS
-	Noframe              = C.ALLEGRO_NOFRAME
-	GenerateExposeEvents = C.ALLEGRO_GENERATE_EXPOSE_EVENTS
-)
-
-const (
-	ColorSize               = C.ALLEGRO_COLOR_SIZE
-	RedSize                 = C.ALLEGRO_RED_SIZE
-	GreenSize               = C.ALLEGRO_GREEN_SIZE
-	BlueSize                = C.ALLEGRO_BLUE_SIZE
-	AlphaSize               = C.ALLEGRO_ALPHA_SIZE
-	RedShift                = C.ALLEGRO_RED_SHIFT
-	GreenShift              = C.ALLEGRO_GREEN_SHIFT
-	BlueShift               = C.ALLEGRO_BLUE_SHIFT
-	AlphaShift              = C.ALLEGRO_ALPHA_SHIFT
-	AccRedSize              = C.ALLEGRO_ACC_RED_SIZE
-	AccGreenSize            = C.ALLEGRO_ACC_GREEN_SIZE
-	AccBlueSize             = C.ALLEGRO_ACC_BLUE_SIZE
-	AccAlphaSize            = C.ALLEGRO_ACC_ALPHA_SIZE
-	Stereo                  = C.ALLEGRO_STEREO
-	AuxBuffers              = C.ALLEGRO_AUX_BUFFERS
-	DepthSize               = C.ALLEGRO_DEPTH_SIZE
-	StencilSize             = C.ALLEGRO_STENCIL_SIZE
-	SampleBuffers           = C.ALLEGRO_SAMPLE_BUFFERS
-	Samples                 = C.ALLEGRO_SAMPLES
-	RenderMethod            = C.ALLEGRO_RENDER_METHOD
-	FloatColor              = C.ALLEGRO_FLOAT_COLOR
-	FloatDepth              = C.ALLEGRO_FLOAT_DEPTH
-	SingleBuffer            = C.ALLEGRO_SINGLE_BUFFER
-	SwapMethod              = C.ALLEGRO_SWAP_METHOD
-	CompatibleDisplay       = C.ALLEGRO_COMPATIBLE_DISPLAY
-	UpdateDisplayRegionFlag = C.ALLEGRO_UPDATE_DISPLAY_REGION
-	Vsync                   = C.ALLEGRO_VSYNC
-	MaxBitmapSize           = C.ALLEGRO_MAX_BITMAP_SIZE
-	SupportNpotBitmap       = C.ALLEGRO_SUPPORT_NPOT_BITMAP
-	CanDrawIntoBitmap       = C.ALLEGRO_CAN_DRAW_INTO_BITMAP
-	SupportSeparateAlpha    = C.ALLEGRO_SUPPORT_SEPARATE_ALPHA
-)
-
-const (
-	Require  = C.ALLEGRO_REQUIRE
-	Suggest  = C.ALLEGRO_SUGGEST
-	DontCare = C.ALLEGRO_DONTCARE
-)
-
 /********************/
 /* Display Creation */
 /********************/
-
-type Display C.ALLEGRO_DISPLAY
 
 func CreateDisplay(w, h int32) *Display {
 	return (*Display)(unsafe.Pointer(C.al_create_display(C.int(w), C.int(h))))
@@ -167,6 +111,16 @@ func (d *Display) SetWindowPosition(x, y int32) {
 	C.al_set_window_position((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), C.int(x), C.int(y))
 }
 
+func (d *Display) GetWindowConstraints() (bool, int32, int32, int32, int32) {
+	var min_w, min_h, max_w, max_h C.int
+	r := C.al_get_window_constraints((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), &min_w, &min_h, &max_w, &max_h)
+	return bool(r), int32(min_w), int32(min_h), int32(max_w), int32(max_h)
+}
+
+func (d *Display) SetWindowConstraints(min_w, min_h, max_w, max_h int32) bool {
+	return bool(C.al_set_window_constraints((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), C.int(min_w), C.int(min_h), C.int(max_w), C.int(max_h)))
+}
+
 /********************/
 /* Display Settings */
 /********************/
@@ -175,7 +129,7 @@ func (d *Display) GetFlags() int32 {
 	return int32(C.al_get_display_flags((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d))))
 }
 
-func (d *Display) SetDisplayFlag(flag int, onoff bool) bool {
+func (d *Display) SetFlag(flag int, onoff bool) bool {
 	return bool(C.al_set_display_flag((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), C.int(flag), C.bool(onoff)))
 }
 
@@ -183,8 +137,16 @@ func (d *Display) GetOption(option int32) int32 {
 	return int32(C.al_get_display_option((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), C.int(option)))
 }
 
+func (d *Display) SetOption(option, value int32) {
+	C.al_set_display_option((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), C.int(option), C.int(value))
+}
+
 func (d *Display) GetFormat() int32 {
 	return int32(C.al_get_display_format((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d))))
+}
+
+func (d *Display) GetOrientation() int32 {
+	return int32(C.al_get_display_orientation((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d))))
 }
 
 func (d *Display) GetRefreshRate() int32 {
@@ -201,9 +163,21 @@ func (d *Display) SetIcon(icon *Bitmap) {
 	C.al_set_display_icon((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), (*C.ALLEGRO_BITMAP)(unsafe.Pointer(icon)))
 }
 
-//func (d *Display) SetIcons(numIcons int, icons [](*Bitmap)) {
-//	C.al_set_display_icons(C.int(numIcons), [](*C.ALLEGRO_BITMAP)(icons))
+//func (d *Display) SetIcons(numIcons int32, icons [](*Bitmap)) {
+//	C.al_set_display_icons(C.int(numIcons), (**C.ALLEGRO_BITMAP)(unsafe.Pointer(&icons[0])))
 //}
+
+/*****************/
+/* Drawing Halts */
+/*****************/
+
+func (d *Display) AcknowledgeDrawingHalt() {
+	C.al_acknowledge_drawing_halt((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)))
+}
+
+func (d *Display) AcknowledgeDrawingResume() {
+	C.al_acknowledge_drawing_resume((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), nil)
+}
 
 /***************/
 /* Screensaver */

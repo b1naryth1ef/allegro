@@ -6,16 +6,6 @@ import "C"
 
 import "unsafe"
 
-const (
-	ResourcesPath     = C.ALLEGRO_RESOURCES_PATH
-	TempPath          = C.ALLEGRO_TEMP_PATH
-	UserDataPath      = C.ALLEGRO_USER_DATA_PATH
-	UserHomePath      = C.ALLEGRO_USER_HOME_PATH
-	UserSettingsPath  = C.ALLEGRO_USER_SETTINGS_PATH
-	UserDocumentsPath = C.ALLEGRO_USER_DOCUMENTS_PATH
-	ExenamePath       = C.ALLEGRO_EXENAME_PATH
-)
-
 func Init() bool {
 	return bool(C.al_install_system(C.ALLEGRO_VERSION_INT, nil))
 }
@@ -40,11 +30,11 @@ func GetStandardPath(id int32) *Path {
 	return (*Path)(unsafe.Pointer(C.al_get_standard_path(C.int(id))))
 }
 
-//func SetExeName(string path) {
-//	p := C.CString(path)
-//	defer C.free(unsafe.pointer(p))
-//	C.al_set_exe_name(p)
-//}
+func SetExeName(path string) {
+	p := C.CString(path)
+	defer C.free(unsafe.Pointer(p))
+	C.al_set_exe_name(p)
+}
 
 func GetAppName() string {
 	return C.GoString(C.al_get_app_name())

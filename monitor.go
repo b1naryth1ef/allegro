@@ -5,13 +5,6 @@ import "C"
 
 import "unsafe"
 
-type MonitorInfo struct {
-	X1 int32
-	Y1 int32
-	X2 int32
-	Y2 int32
-}
-
 func GetNewDisplayAdapter() int32 {
 	return int32(C.al_get_new_display_adapter())
 }

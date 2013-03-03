@@ -5,12 +5,6 @@ import "C"
 
 import "unsafe"
 
-type Config C.ALLEGRO_CONFIG
-
-type ConfigSection C.ALLEGRO_CONFIG_SECTION
-
-type ConfigEntry C.ALLEGRO_CONFIG_ENTRY
-
 func CreateConfig() *Config {
 	return (*Config)(unsafe.Pointer(C.al_create_config()))
 }
@@ -19,22 +13,36 @@ func (c *Config) Destroy() {
 	C.al_destroy_config((*C.ALLEGRO_CONFIG)(unsafe.Pointer(c)))
 }
 
-func LoadConfigFile(fileName string) *Config {
-	f := C.CString(fileName)
+func LoadConfigFile(filename string) *Config {
+	f := C.CString(filename)
 	defer C.free(unsafe.Pointer(f))
 	return (*Config)(unsafe.Pointer(C.al_load_config_file(f)))
 }
 
-func (c *Config) SaveFile(fileName string) bool {
-	f := C.CString(fileName)
+func LoadConfigFileF(file *File) *Config {
+	return (*Config)(unsafe.Pointer(C.al_load_config_file_f((*C.ALLEGRO_FILE)(unsafe.Pointer(file)))))
+}
+
+func (c *Config) SaveFile(filename string) bool {
+	f := C.CString(filename)
 	defer C.free(unsafe.Pointer(f))
 	return bool(C.al_save_config_file(f, (*C.ALLEGRO_CONFIG)(unsafe.Pointer(c))))
+}
+
+func (c *Config) SaveFileF(file *File) bool {
+	return bool(C.al_save_config_file_f((*C.ALLEGRO_CONFIG)(unsafe.Pointer(c)), (*C.ALLEGRO_FILE)(unsafe.Pointer(file))))
 }
 
 func (c *Config) AddSection(name string) {
 	n := C.CString(name)
 	defer C.free(unsafe.Pointer(n))
 	C.al_add_config_section((*C.ALLEGRO_CONFIG)(unsafe.Pointer(c)), n)
+}
+
+func (c *Config) RemoveSection(section string) bool {
+	s := C.CString(section)
+	defer C.free(unsafe.Pointer(s))
+	return bool(C.al_remove_config_section((*C.ALLEGRO_CONFIG)(unsafe.Pointer(c)), s))
 }
 
 func (c *Config) AddComment(section, comment string) {
@@ -61,6 +69,14 @@ func (c *Config) SetValue(section, key, value string) {
 	v := C.CString(value)
 	defer C.free(unsafe.Pointer(v))
 	C.al_set_config_value((*C.ALLEGRO_CONFIG)(unsafe.Pointer(c)), s, k, v)
+}
+
+func (c *Config) RemoveKey(section, key string) bool {
+	s := C.CString(section)
+	defer C.free(unsafe.Pointer(s))
+	k := C.CString(key)
+	defer C.free(unsafe.Pointer(k))
+	return bool(C.al_remove_config_key((*C.ALLEGRO_CONFIG)(unsafe.Pointer(c)), s, k))
 }
 
 func (c *Config) GetFirstSection() (string, **ConfigSection) {

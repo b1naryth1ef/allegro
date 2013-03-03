@@ -3,11 +3,6 @@ package allegro
 // #include <allegro5/allegro.h>
 import "C"
 
-const (
-	FixToRad = int32(1608)
-	RadToFix = int32(2670177)
-)
-
 func IntToFix(x int32) int32 {
 	return int32(C.al_itofix(C.int(x)))
 }
@@ -49,7 +44,7 @@ func FixSub(x, y int32) int32 {
 }
 
 /****************************/
-/* Fixed point trigonometry */
+/* Fixed Point Trigonometry */
 /****************************/
 
 func FixSin(x int32) int32 {

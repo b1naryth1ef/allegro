@@ -5,15 +5,6 @@ import "C"
 
 import "unsafe"
 
-const (
-	JoyflagDigital  = C.ALLEGRO_JOYFLAG_DIGITAL
-	JoyflagAnalogue = C.ALLEGRO_JOYFLAG_DIGITAL
-)
-
-type Joystick C.ALLEGRO_JOYSTICK
-
-type JoystickState C.ALLEGRO_JOYSTICK_STATE
-
 func InstallJoystick() bool {
 	return bool(C.al_install_joystick())
 }

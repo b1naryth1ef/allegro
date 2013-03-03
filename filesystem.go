@@ -6,12 +6,12 @@ import "C"
 import "unsafe"
 
 const (
-	FilemodeRead = C.ALLEGRO_FILEMODE_READ
-	FilemodeWrite = C.ALLEGRO_FILEMODE_WRITE
+	FilemodeRead    = C.ALLEGRO_FILEMODE_READ
+	FilemodeWrite   = C.ALLEGRO_FILEMODE_WRITE
 	FilemodeExecute = C.ALLEGRO_FILEMODE_EXECUTE
-	FilemodeHidden = C.ALLEGRO_FILEMODE_HIDDEN
-	FilemodeIsfile = C.ALLEGRO_FILEMODE_ISFILE
-	FilemodeIsdir = C.ALLEGRO_FILEMODE_ISDIR
+	FilemodeHidden  = C.ALLEGRO_FILEMODE_HIDDEN
+	FilemodeIsfile  = C.ALLEGRO_FILEMODE_ISFILE
+	FilemodeIsdir   = C.ALLEGRO_FILEMODE_ISDIR
 )
 
 type FsEntry C.ALLEGRO_FS_ENTRY
@@ -102,7 +102,7 @@ func ChangeDirectory(path string) bool {
 
 func MakeDirectory(path string) bool {
 	p := C.CString(path)
-	defer C.free(unsafe.Pointer(p))	
+	defer C.free(unsafe.Pointer(p))
 	return bool(C.al_make_directory(p))
 }
 

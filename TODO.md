@@ -1,6 +1,6 @@
 TODO List
 =========
-* Implement modules: shader, direct3d, opengl
+* Implement modules: direct3d, opengl
 * Implement addons: image, audio, audio_codec, font, color, physfs, primitives, video, memfile
 * Use GO's test facilities.
 * Port some allegro examples.
@@ -33,13 +33,13 @@ Macros not implemented
 
 Not going to be implemented
 ===========================
-* file.go -> al_fget_ustr
-* memory
-* path
-* utf8
-* threads
-* time
-* misc
-* platform.ios platform.android
-* main addon
-* native dialogs addon
+* file.go -> al_fget_ustr -> See utf8.
+* memory -> No need. Go is garbage collected.
+* path -> Ne need. Go has "path" and "filepath" packages.
+* utf8 -> Go supports UTF8. Do we need this?
+* threads -> Ne need. Go has goroutines.
+* time -> Ne need. Go has "time" package.
+* misc -> Not applicable.
+* platform.ios platform.android -> Not fully supported by go.
+* main addon -> Not applicable.
+* native dialogs addon -> ?!?

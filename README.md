@@ -1,7 +1,7 @@
 Allegro Go Bindings
 ===================
 
-Allegro 5.x bindings for Go programming language
+Allegro 5.1.x bindings for Go programming language
 
 Status
 ======

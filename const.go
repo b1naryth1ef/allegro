@@ -1,6 +1,7 @@
 package allegro
 
 // #include <allegro5/allegro.h>
+// #include <allegro5/allegro_shader.h>
 import "C"
 
 // system.go
@@ -407,6 +408,18 @@ const (
 	SystemMouseCursorLink        = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_LINK
 	SystemMouseCursorSelect      = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_ALT_SELECT
 	SystemMouseCursorUnavailable = C.ALLEGRO_SYSTEM_MOUSE_CURSOR_UNAVAILABLE
+)
+
+// shader.go
+const (
+	VertexShader = C.ALLEGRO_VERTEX_SHADER
+	PixelShader = C.ALLEGRO_PIXEL_SHADER
+)
+
+const (
+	ShaderAuto = C.ALLEGRO_SHADER_AUTO
+	ShaderGlsl = C.ALLEGRO_SHADER_GLSL
+	ShaderHlsl = C.ALLEGRO_SHADER_HLSL
 )
 
 // state.go

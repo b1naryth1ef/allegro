@@ -1,6 +1,7 @@
 package allegro
 
 // #include <allegro5/allegro.h>
+// #include <allegro5/allegro_shader.h>
 // #include "events.h"
 import "C"
 
@@ -169,6 +170,9 @@ type MouseState struct {
 	pressure int32
 	disp     *Display
 }
+
+// shader.go
+type Shader C.ALLEGRO_SHADER
 
 // state.go
 type State C.ALLEGRO_STATE

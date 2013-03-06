@@ -9,5 +9,5 @@ func SetPhysfsFileInterface() {
 }
 
 func GetAllegroPhysfsVersion() uint32 {
-	return uint32(C.al_get_physfs_version())
+	return uint32(C.al_get_allegro_physfs_version())
 }

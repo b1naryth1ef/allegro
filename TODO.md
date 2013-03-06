@@ -15,6 +15,7 @@ Callbacks not implemented
 * files.go -> al_fopen_interface | al_set_new_file_interface | al_set_standard_file_interface | al_get_new_file_interface | al_create_file_handle | al_get_file_userdata
 * filesystem.go -> al_set_fs_interface | al_set_standard_fs_interface | al_get_fs_interface
 * graphics.go -> al_create_custom_bitmap | al_register_bitmap_loader | al_register_bitmap_saver | al_register_bitmap_loader_f | al_register_bitmap_saver_f
+* direct3d.go -> al_d3d_set_release_callback | al_d3d_set_restore_callback
 
 Quirks?
 =======
@@ -42,3 +43,9 @@ Not going to be implemented
 * platform.ios platform.android -> Not fully supported by go.
 * main addon -> Not applicable.
 * native dialogs addon -> ?!?
+
+-al_get_opengl_extension_list
+-al_get_opengl_proc_address
+-al_get_d3d_device
+-al_get_d3d_system_texture
+-al_get_d3d_video_texture

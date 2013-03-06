@@ -1,7 +1,6 @@
 TODO List
 =========
-* Implement modules: direct3d, opengl
-* Implement addons: image, audio, audio_codec, font, color, physfs, primitives, video, memfile
+* Implement addons: audio, font, color, primitives, video
 * Use GO's test facilities.
 * Port some allegro examples.
 * Documentation? (Is it worth copying over the Allegro docs? How will it be maintained?).

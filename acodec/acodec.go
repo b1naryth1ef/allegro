@@ -1,4 +1,5 @@
 package acodec
+
 // #cgo LDFLAGS: -lallegro_acodec
 // #include <allegro5/allegro.h>
 // #include <allegro5/allegro_acodec.h>

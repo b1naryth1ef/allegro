@@ -1,12 +1,13 @@
 package memfile
+
 // #cgo LDFLAGS: -lallegro_memfile
 // #include <allegro5/allegro.h>
 // #include <allegro5/allegro_memfile.h>
 import "C"
 
 import (
-	"unsafe"
 	"github.com/tapir/allegro"
+	"unsafe"
 )
 
 func OpenMemfile(mem unsafe.Pointer, size int64, mode string) *allegro.File {

@@ -1,4 +1,5 @@
 package physicsfs
+
 // #cgo LDFLAGS: -lallegro_physfs
 // #include <allegro5/allegro.h>
 // #include <allegro5/allegro_physfs.h>

@@ -2,6 +2,7 @@ package allegro
 
 // #include <allegro5/allegro.h>
 // #include <allegro5/allegro_shader.h>
+// #include <allegro5/allegro_opengl.h>
 import "C"
 
 // system.go
@@ -413,7 +414,7 @@ const (
 // shader.go
 const (
 	VertexShader = C.ALLEGRO_VERTEX_SHADER
-	PixelShader = C.ALLEGRO_PIXEL_SHADER
+	PixelShader  = C.ALLEGRO_PIXEL_SHADER
 )
 
 const (
@@ -444,4 +445,10 @@ const (
 	MouseEmulationInclusive   = C.ALLEGRO_MOUSE_EMULATION_INCLUSIVE
 	MouseEmulationExclusive   = C.ALLEGRO_MOUSE_EMULATION_EXCLUSIVE
 	MouseEmulation50X         = C.ALLEGRO_MOUSE_EMULATION_5_0_x
+)
+
+// opengl.go
+const (
+	DesktopOpengl = C.ALLEGRO_DESKTOP_OPENGL
+	OpenglEs      = C.ALLEGRO_OPENGL_ES
 )

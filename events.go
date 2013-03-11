@@ -89,10 +89,10 @@ func (u *UserEvent) Unref() {
 	C.al_unref_user_event((*C.ALLEGRO_USER_EVENT)(unsafe.Pointer(u)))
 }
 
-func (e *EventSource) GetData() unsafe.Pointer {
-	return unsafe.Pointer(C.al_get_event_source_data((*C.ALLEGRO_EVENT_SOURCE)(unsafe.Pointer(e))))
-}
+//func (e *EventSource) GetData() unsafe.Pointer {
+//	return unsafe.Pointer(C.al_get_event_source_data((*C.ALLEGRO_EVENT_SOURCE)(unsafe.Pointer(e))))
+//}
 
-func (e *EventSource) SetData(data unsafe.Pointer) {
-	C.al_set_event_source_data((*C.ALLEGRO_EVENT_SOURCE)(unsafe.Pointer(e)), C.intptr_t(data))
-}
+//func (e *EventSource) SetData(data unsafe.Pointer) {
+//	C.al_set_event_source_data((*C.ALLEGRO_EVENT_SOURCE)(unsafe.Pointer(e)), C.intptr_t(data))
+//}

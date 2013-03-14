@@ -53,6 +53,8 @@ const (
 
 type Mixer C.ALLEGRO_MIXER
 
+type SampleId C.ALLEGRO_SAMPLE_ID
+
 type Sample C.ALLEGRO_SAMPLE
 
 type SampleInstance C.ALLEGRO_SAMPLE_INSTANCE
@@ -164,5 +166,151 @@ func CreateSample(buf unsafe.Pointer, samples, freq, depth, chanConf uint32, fre
 func (s *Sample) Destroy() {
 	C.al_destroy_sample((*C.ALLEGRO_SAMPLE)(unsafe.Pointer(s)))
 }
+
+func (s *Sample) Play(gain, pan, speed float32, loop uint32) (bool, *SampleId) {
+	retId := new(C.ALLEGRO_SAMPLE_ID)
+	r := bool(C.al_play_sample((*C.ALLEGRO_SAMPLE)(unsafe.Pointer(s)), C.float(gain), C.float(pan), C.float(speed), C.ALLEGRO_PLAYMODE(loop), retId))
+	return r, (*SampleId)(unsafe.Pointer(retId))
+}
+
+func (s *SampleId) Stop() {
+	C.al_stop_sample((*C.ALLEGRO_SAMPLE_ID)(unsafe.Pointer(s)))
+}
+
+func StopSamples() {
+	C.al_stop_samples()
+}
+
+func (s *Sample) GetChannels() uint32 {
+	return uint32(C.al_get_sample_channels((*C.ALLEGRO_SAMPLE)(unsafe.Pointer(s))))
+}
+
+func (s *Sample) GetDepth() uint32 {
+	return uint32(C.al_get_sample_depth((*C.ALLEGRO_SAMPLE)(unsafe.Pointer(s))))
+}
+
+func (s *Sample) GetFrequency() uint32 {
+	return uint32(C.al_get_sample_frequency((*C.ALLEGRO_SAMPLE)(unsafe.Pointer(s))))
+}
+
+func (s *Sample) GetLength() uint32 {
+	return uint32(C.al_get_sample_length((*C.ALLEGRO_SAMPLE)(unsafe.Pointer(s))))
+}
+
+func (s *Sample) GetData() unsafe.Pointer {
+	return unsafe.Pointer(C.al_get_sample_data((*C.ALLEGRO_SAMPLE)(unsafe.Pointer(s))))
+}
+
+/*****************************/
+/* Sample instance functions */
+/*****************************/
+
+func CreateSampleInstance(sampleData *Sample) *SampleInstance {
+	return (*SampleInstance)(unsafe.Pointer(C.al_create_sample_instance((*C.ALLEGRO_SAMPLE)(unsafe.Pointer(sampleData)))))
+}
+
+func (s *SampleInstance) Destroy() {
+	C.al_destroy_sample_instance((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s)))
+}
+
+func (s *SampleInstance) Play() bool {
+	return bool(C.al_play_sample_instance((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s))))
+}
+
+func (s *SampleInstance) Stop() bool {
+	return bool(C.al_stop_sample_instance((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s))))
+}
+
+func (s *SampleInstance) GetChannels() uint32 {
+	return uint32(C.al_get_sample_instance_channels((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s))))
+}
+
+func (s *SampleInstance) GetDepth() uint32 {
+	return uint32(C.al_get_sample_instance_depth((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s))))
+}
+
+func (s *SampleInstance) GetFrequency() uint32 {
+	return uint32(C.al_get_sample_instance_frequency((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s))))
+}
+
+func (s *SampleInstance) GetLength() uint32 {
+	return uint32(C.al_get_sample_instance_length((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s))))
+}
+
+func (s *SampleInstance) SetLength(val uint32) bool {
+	return bool(C.al_set_sample_instance_length((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s)), C.uint(val)))
+}
+
+func (s *SampleInstance) GetPosition() uint32 {
+	return uint32(C.al_get_sample_instance_position((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s))))
+}
+
+func (s *SampleInstance) SetPosition(val uint32) bool {
+	return bool(C.al_set_sample_instance_position((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s)), C.uint(val)))
+}
+
+func (s *SampleInstance) GetSpeed() float32 {
+	return float32(C.al_get_sample_instance_speed((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s))))
+}
+
+func (s *SampleInstance) SetSpeed(val float32) bool {
+	return bool(C.al_set_sample_instance_speed((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s)), C.float(val)))
+}
+
+func (s *SampleInstance) GetGain() float32 {
+	return float32(C.al_get_sample_instance_gain((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s))))
+}
+
+func (s *SampleInstance) SetGain(val float32) bool {
+	return bool(C.al_set_sample_instance_gain((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s)), C.float(val)))
+}
+
+func (s *SampleInstance) GetPan() float32 {
+	return float32(C.al_get_sample_instance_pan((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s))))
+}
+
+func (s *SampleInstance) SetPan(val float32) bool {
+	return bool(C.al_set_sample_instance_pan((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s)), C.float(val)))
+}
+
+func (s *SampleInstance) GetTime() float32 {
+	return float32(C.al_get_sample_instance_time((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s))))
+}
+
+func (s *SampleInstance) GetPlaymode() uint32 {
+	return uint32(C.al_get_sample_instance_playmode((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s))))
+}
+
+func (s *SampleInstance) SetPlaymode(val uint32) bool {
+	return bool(C.al_set_sample_instance_playmode((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s)), C.ALLEGRO_PLAYMODE(val)))
+}
+
+func (s *SampleInstance) GetPlaying() bool {
+	return bool(C.al_get_sample_instance_playing((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s))))
+}
+
+func (s *SampleInstance) SetPlaying(val bool) bool {
+	return bool(C.al_set_sample_instance_playing((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s)), C.bool(val)))
+}
+
+func (s *SampleInstance) GetAttached() bool {
+	return bool(C.al_get_sample_instance_attached((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s))))
+}
+
+func (s *SampleInstance) Detach() bool {
+	return bool(C.al_detach_sample_instance((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s))))
+}
+
+func (s *SampleInstance) GetSample() *Sample {
+	return (*Sample)(unsafe.Pointer(C.al_get_sample((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s)))))
+}
+
+func (s *SampleInstance) SetSample(data *Sample) bool {
+	return bool(C.al_set_sample((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(s)), (*C.ALLEGRO_SAMPLE)(unsafe.Pointer(data))))
+}
+
+/*******************/
+/* Mixer functions */
+/*******************/
 
 

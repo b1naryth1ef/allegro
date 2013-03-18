@@ -6,7 +6,7 @@ package audio
 import "C"
 
 import (
-	//	"github.com/tapir/allegro"
+	"github.com/tapir/allegro"
 	"unsafe"
 )
 
@@ -391,4 +391,20 @@ func (m *Mixer) GetAttached() bool {
 
 func (m *Mixer) Detach() bool {
 	return bool(C.al_detach_mixer((*C.ALLEGRO_MIXER)(unsafe.Pointer(m))))
+}
+
+/********************/
+/* Stream functions */
+/********************/
+
+func CreateAudioStream(fragmentCount uint64, fragSample, freq, depth, chanConf uint32) *AudioStream {
+	return (*AudioStream)(unsafe.Pointer(C.al_create_audio_stream(C.size_t(fragmentCount), C.uint(fragSample), C.uint(freq), C.ALLEGRO_AUDIO_DEPTH(depth), C.ALLEGRO_CHANNEL_CONF(chanConf))))
+}
+
+func (a *AudioStream) Destroy() {
+	C.al_destroy_audio_stream((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a)))
+}
+
+func (a *AudioStream) GetEventSource() *allegro.EventSource {
+	return (*allegro.EventSource)(unsafe.Pointer(C.al_get_audio_stream_event_source((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a)))))
 }

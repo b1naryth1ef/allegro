@@ -6,48 +6,48 @@ package audio
 import "C"
 
 import (
-//	"github.com/tapir/allegro"
+	//	"github.com/tapir/allegro"
 	"unsafe"
 )
 
 const (
-	AudioDepthInt8 = C.ALLEGRO_AUDIO_DEPTH_INT8
-	AudioDepthInt16 = C.ALLEGRO_AUDIO_DEPTH_INT16
-	AudioDepthInt24 = C.ALLEGRO_AUDIO_DEPTH_INT24
-	AudioDepthFloat32 = C.ALLEGRO_AUDIO_DEPTH_FLOAT32
+	AudioDepthInt8     = C.ALLEGRO_AUDIO_DEPTH_INT8
+	AudioDepthInt16    = C.ALLEGRO_AUDIO_DEPTH_INT16
+	AudioDepthInt24    = C.ALLEGRO_AUDIO_DEPTH_INT24
+	AudioDepthFloat32  = C.ALLEGRO_AUDIO_DEPTH_FLOAT32
 	AudioDepthUnsigned = C.ALLEGRO_AUDIO_DEPTH_UNSIGNED
-	AudioDepthUint8 = C.ALLEGRO_AUDIO_DEPTH_UINT8
-	AudioDepthUint16 = C.ALLEGRO_AUDIO_DEPTH_UINT16
-	AudioDepthUint24 = C.ALLEGRO_AUDIO_DEPTH_UINT24
+	AudioDepthUint8    = C.ALLEGRO_AUDIO_DEPTH_UINT8
+	AudioDepthUint16   = C.ALLEGRO_AUDIO_DEPTH_UINT16
+	AudioDepthUint24   = C.ALLEGRO_AUDIO_DEPTH_UINT24
 )
 
 const AudioPanNone float32 = 1000
 
 const (
-	ChannelConf1 = C.ALLEGRO_CHANNEL_CONF_1
-	ChannelConf2 = C.ALLEGRO_CHANNEL_CONF_2
-	ChannelConf3 = C.ALLEGRO_CHANNEL_CONF_3
-	ChannelConf4 = C.ALLEGRO_CHANNEL_CONF_4
+	ChannelConf1  = C.ALLEGRO_CHANNEL_CONF_1
+	ChannelConf2  = C.ALLEGRO_CHANNEL_CONF_2
+	ChannelConf3  = C.ALLEGRO_CHANNEL_CONF_3
+	ChannelConf4  = C.ALLEGRO_CHANNEL_CONF_4
 	ChannelConf51 = C.ALLEGRO_CHANNEL_CONF_5_1
 	ChannelConf61 = C.ALLEGRO_CHANNEL_CONF_6_1
 	ChannelConf71 = C.ALLEGRO_CHANNEL_CONF_7_1
 )
 
 const (
-	MixerQualityPoint = C.ALLEGRO_MIXER_QUALITY_POINT
+	MixerQualityPoint  = C.ALLEGRO_MIXER_QUALITY_POINT
 	MixerQualityLinear = C.ALLEGRO_MIXER_QUALITY_LINEAR
-	MixerQualityCubic = C.ALLEGRO_MIXER_QUALITY_CUBIC
+	MixerQualityCubic  = C.ALLEGRO_MIXER_QUALITY_CUBIC
 )
 
 const (
-	PlaymodeOnce = C.ALLEGRO_PLAYMODE_ONCE
-	PlaymodeLoop = C.ALLEGRO_PLAYMODE_LOOP
+	PlaymodeOnce  = C.ALLEGRO_PLAYMODE_ONCE
+	PlaymodeLoop  = C.ALLEGRO_PLAYMODE_LOOP
 	PlaymodeBidir = C.ALLEGRO_PLAYMODE_BIDIR
 )
 
 const (
-	EventAudioRouteChange = C.ALLEGRO_EVENT_AUDIO_ROUTE_CHANGE
-	EventAudioInterruption = C.ALLEGRO_EVENT_AUDIO_INTERRUPTION
+	EventAudioRouteChange     = C.ALLEGRO_EVENT_AUDIO_ROUTE_CHANGE
+	EventAudioInterruption    = C.ALLEGRO_EVENT_AUDIO_INTERRUPTION
 	EventAudioEndInterruption = C.ALLEGRO_EVENT_AUDIO_END_INTERRUPTION
 )
 
@@ -313,4 +313,82 @@ func (s *SampleInstance) SetSample(data *Sample) bool {
 /* Mixer functions */
 /*******************/
 
+func CreateMixer(freq, depth, chanConf uint32) *Mixer {
+	return (*Mixer)(unsafe.Pointer(C.al_create_mixer(C.uint(freq), C.ALLEGRO_AUDIO_DEPTH(depth), C.ALLEGRO_CHANNEL_CONF(chanConf))))
+}
 
+func (m *Mixer) Destroy() {
+	C.al_destroy_mixer((*C.ALLEGRO_MIXER)(unsafe.Pointer(m)))
+}
+
+func GetDefaultMixer() *Mixer {
+	return (*Mixer)(unsafe.Pointer(C.al_get_default_mixer()))
+}
+
+func (m *Mixer) SetDefault() bool {
+	return bool(C.al_set_default_mixer((*C.ALLEGRO_MIXER)(unsafe.Pointer(m))))
+}
+
+func RestoreDefaultMixer() bool {
+	return bool(C.al_restore_default_mixer())
+}
+
+func (m *Mixer) AttachMixer(mixer *Mixer) bool {
+	return bool(C.al_attach_mixer_to_mixer((*C.ALLEGRO_MIXER)(unsafe.Pointer(m)), (*C.ALLEGRO_MIXER)(unsafe.Pointer(mixer))))
+}
+
+func (m *Mixer) AttachSampleInstance(spl *SampleInstance) bool {
+	return bool(C.al_attach_sample_instance_to_mixer((*C.ALLEGRO_SAMPLE_INSTANCE)(unsafe.Pointer(spl)), (*C.ALLEGRO_MIXER)(unsafe.Pointer(m))))
+}
+
+func (m *Mixer) AttachAudioStream(stream *AudioStream) bool {
+	return bool(C.al_attach_audio_stream_to_mixer((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(stream)), (*C.ALLEGRO_MIXER)(unsafe.Pointer(m))))
+}
+
+func (m *Mixer) GetFrequency() uint32 {
+	return uint32(C.al_get_mixer_frequency((*C.ALLEGRO_MIXER)(unsafe.Pointer(m))))
+}
+
+func (m *Mixer) SetFrequency(freq uint32) bool {
+	return bool(C.al_set_mixer_frequency((*C.ALLEGRO_MIXER)(unsafe.Pointer(m)), C.uint(freq)))
+}
+
+func (m *Mixer) GetChannels() uint32 {
+	return uint32(C.al_get_mixer_channels((*C.ALLEGRO_MIXER)(unsafe.Pointer(m))))
+}
+
+func (m *Mixer) GetDepth() uint32 {
+	return uint32(C.al_get_mixer_depth((*C.ALLEGRO_MIXER)(unsafe.Pointer(m))))
+}
+
+func (m *Mixer) GetGain() float32 {
+	return float32(C.al_get_mixer_gain((*C.ALLEGRO_MIXER)(unsafe.Pointer(m))))
+}
+
+func (m *Mixer) SetGain(gain float32) bool {
+	return bool(C.al_set_mixer_gain((*C.ALLEGRO_MIXER)(unsafe.Pointer(m)), C.float(gain)))
+}
+
+func (m *Mixer) GetQuality() uint32 {
+	return uint32(C.al_get_mixer_quality((*C.ALLEGRO_MIXER)(unsafe.Pointer(m))))
+}
+
+func (m *Mixer) SetQuality(newQuality uint32) bool {
+	return bool(C.al_set_mixer_quality((*C.ALLEGRO_MIXER)(unsafe.Pointer(m)), C.ALLEGRO_MIXER_QUALITY(newQuality)))
+}
+
+func (m *Mixer) GetPlaying() bool {
+	return bool(C.al_get_mixer_playing((*C.ALLEGRO_MIXER)(unsafe.Pointer(m))))
+}
+
+func (m *Mixer) SetPlaying(val bool) bool {
+	return bool(C.al_set_mixer_playing((*C.ALLEGRO_MIXER)(unsafe.Pointer(m)), C.bool(val)))
+}
+
+func (m *Mixer) GetAttached() bool {
+	return bool(C.al_get_mixer_attached((*C.ALLEGRO_MIXER)(unsafe.Pointer(m))))
+}
+
+func (m *Mixer) Detach() bool {
+	return bool(C.al_detach_mixer((*C.ALLEGRO_MIXER)(unsafe.Pointer(m))))
+}

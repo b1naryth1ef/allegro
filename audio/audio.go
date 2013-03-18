@@ -3,6 +3,7 @@ package audio
 // #cgo LDFLAGS: -lallegro_audio
 // #include <allegro5/allegro.h>
 // #include <allegro5/allegro_audio.h>
+// #include "../events.h"
 import "C"
 
 import (
@@ -21,6 +22,7 @@ const (
 	AudioDepthUint24   = C.ALLEGRO_AUDIO_DEPTH_UINT24
 )
 
+// const AudioPanNone = C.ALLEGRO_AUDIO_PAN_NONE !??
 const AudioPanNone float32 = 1000
 
 const (
@@ -51,6 +53,8 @@ const (
 	EventAudioEndInterruption = C.ALLEGRO_EVENT_AUDIO_END_INTERRUPTION
 )
 
+const EventAudioRecorderFragment = C.ALLEGRO_EVENT_AUDIO_RECORDER_FRAGMENT
+
 type Mixer C.ALLEGRO_MIXER
 
 type SampleId C.ALLEGRO_SAMPLE_ID
@@ -62,6 +66,17 @@ type SampleInstance C.ALLEGRO_SAMPLE_INSTANCE
 type AudioStream C.ALLEGRO_AUDIO_STREAM
 
 type Voice C.ALLEGRO_VOICE
+
+type AudioRecorder C.ALLEGRO_AUDIO_RECORDER
+
+type AudioRecorderEvent struct {
+	Type      uint32
+	Source    *AudioRecorder
+	TimeStamp float64
+	internalDescr *C.ALLEGRO_USER_EVENT_DESCRIPTOR
+	Buffer unsafe.Pointer
+	Samples uint32
+}
 
 /********************/
 /* Setting up audio */
@@ -407,4 +422,180 @@ func (a *AudioStream) Destroy() {
 
 func (a *AudioStream) GetEventSource() *allegro.EventSource {
 	return (*allegro.EventSource)(unsafe.Pointer(C.al_get_audio_stream_event_source((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a)))))
+}
+
+func (a *AudioStream) Drain() {
+	C.al_drain_audio_stream((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a)))
+}
+
+func (a *AudioStream) Rewind() bool {
+	return bool(C.al_rewind_audio_stream((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a))))
+}
+
+func (a *AudioStream) GetFrequency() uint32 {
+	return uint32(C.al_get_audio_stream_frequency((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a))))
+}
+
+func (a *AudioStream) GetChannels() uint32 {
+	return uint32(C.al_get_audio_stream_channels((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a))))
+}
+
+func (a *AudioStream) GetDepth() uint32 {
+	return uint32(C.al_get_audio_stream_depth((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a))))
+}
+
+func (a *AudioStream) GetLength() uint32 {
+	return uint32(C.al_get_audio_stream_length((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a))))
+}
+
+func (a *AudioStream) GetSpeed() float32 {
+	return float32(C.al_get_audio_stream_speed((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a))))
+}
+
+func (a *AudioStream) GetGain() float32 {
+	return float32(C.al_get_audio_stream_gain((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a))))
+}
+
+func (a *AudioStream) SetGain(val float32) bool {
+	return bool(C.al_set_audio_stream_gain((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a)), C.float(val)))
+}
+
+func (a *AudioStream) GetPan() float32 {
+	return float32(C.al_get_audio_stream_pan((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a))))
+}
+
+func (a *AudioStream) SetPan(val float32) bool {
+	return bool(C.al_set_audio_stream_pan((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a)), C.float(val)))
+}
+
+func (a *AudioStream) GetPlaying() bool {
+	return bool(C.al_get_audio_stream_playing((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a))))
+}
+
+func (a *AudioStream) SetPlaying(val bool) bool {
+	return bool(C.al_set_audio_stream_playing((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a)), C.bool(val)))
+}
+
+func (a *AudioStream) GetPlaymode() uint32 {
+	return uint32(C.al_get_audio_stream_playmode((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a))))
+}
+
+func (a *AudioStream) SetPlaymode(val uint32) bool {
+	return bool(C.al_set_audio_stream_playmode((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a)), C.ALLEGRO_PLAYMODE(val)))
+}
+
+func (a *AudioStream) GetAttached() bool {
+	return bool(C.al_get_audio_stream_attached((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a))))
+}
+
+func (a *AudioStream) Detach() bool {
+	return bool(C.al_detach_audio_stream((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a))))
+}
+
+func (a *AudioStream) GetFragment() unsafe.Pointer {
+	return unsafe.Pointer(C.al_get_audio_stream_fragment((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a))))
+}
+
+func (a *AudioStream) SetFragment(val unsafe.Pointer) bool {
+	return bool(C.al_set_audio_stream_fragment((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a)), val))
+}
+
+func (a *AudioStream) GetFragments() uint32 {
+	return uint32(C.al_get_audio_stream_fragments((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a))))
+}
+
+func (a *AudioStream) GetAvailableFragments() uint32 {
+	return uint32(C.al_get_available_audio_stream_fragments((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a))))
+}
+
+func (a *AudioStream) SeekSecs(time float64) bool {
+	return bool(C.al_seek_audio_stream_secs((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a)), C.double(time)))
+}
+
+func (a *AudioStream) GetPositionSecs() float64 {
+	return float64(C.al_get_audio_stream_position_secs((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a))))
+}
+
+func (a *AudioStream) GetLengthSecs() float64 {
+	return float64(C.al_get_audio_stream_length_secs((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a))))
+}
+
+func (a *AudioStream) SetLoopSecs(start, end float64) bool {
+	return bool(C.al_set_audio_stream_loop_secs((*C.ALLEGRO_AUDIO_STREAM)(unsafe.Pointer(a)), C.double(start), C.double(end)))
+}
+
+/*****************/
+/* Audio file IO */
+/*****************/
+
+func LoadSample(filename string) *Sample {
+	f := C.CString(filename)
+	defer C.free(unsafe.Pointer(f))
+	return (*Sample)(unsafe.Pointer(C.al_load_sample(f)))
+}
+
+func LoadSampleF(fp *allegro.File, ident string) *Sample {
+	i := C.CString(ident)
+	defer C.free(unsafe.Pointer(i))
+	return (*Sample)(unsafe.Pointer(C.al_load_sample_f((*C.ALLEGRO_FILE)(unsafe.Pointer(fp)), i)))
+}
+
+func LoadAudioStream(filename string, bufferCount uint64, samples uint32) *AudioStream {
+	f := C.CString(filename)
+	defer C.free(unsafe.Pointer(f))
+	return (*AudioStream)(unsafe.Pointer(C.al_load_audio_stream(f, C.size_t(bufferCount), C.uint(samples))))
+}
+
+func LoadAudioStreamF(fp *allegro.File, ident string, bufferCount uint64, samples uint32) *AudioStream {
+	i := C.CString(ident)
+	defer C.free(unsafe.Pointer(i))
+	return (*AudioStream)(unsafe.Pointer(C.al_load_audio_stream_f((*C.ALLEGRO_FILE)(fp), i, C.size_t(bufferCount), C.uint(samples))))
+}
+
+func (s *Sample) Save(filename string) bool {
+	f := C.CString(filename)
+	defer C.free(unsafe.Pointer(f))
+	return bool(C.al_save_sample(f, (*C.ALLEGRO_SAMPLE)(unsafe.Pointer(s))))
+}
+
+func (s *Sample) SaveF(fp *allegro.File, ident string) bool {
+	i := C.CString(ident)
+	defer C.free(unsafe.Pointer(i))
+	return bool(C.al_save_sample_f((*C.ALLEGRO_SAMPLE)(unsafe.Pointer(s)), i, (*C.ALLEGRO_SAMPLE)(unsafe.Pointer(s))))
+}
+
+/****************/
+/* Audio events */
+/****************/
+
+func GetAudioEventSource() *allegro.EventSource {
+	return (*allegro.EventSource)(unsafe.Pointer(C.al_get_audio_event_source()))
+}
+
+/*******************/
+/* Audio recording */
+/*******************/
+
+func CreateAudioRecorder(fragmentCount uint64, samples, frequency, depth, chanConf uint32) *AudioRecorder {
+	return (*AudioRecorder)(unsafe.Pointer(C.al_create_audio_recorder(C.size_t(fragmentCount), C.uint(samples), C.uint(frequency), C.ALLEGRO_AUDIO_DEPTH(depth), C.ALLEGRO_CHANNEL_CONF(chanConf))))
+}
+
+func (a *AudioRecorder) Destroy() {
+	C.al_destroy_audio_recorder((*C.ALLEGRO_AUDIO_RECORDER)(unsafe.Pointer(a)))
+}
+
+func (a *AudioRecorder) Stop() {
+	C.al_stop_audio_recorder((*C.ALLEGRO_AUDIO_RECORDER)(unsafe.Pointer(a)))
+}
+
+func (a *AudioRecorder) IsRecording() bool {
+	return bool(C.al_is_audio_recorder_recording((*C.ALLEGRO_AUDIO_RECORDER)(unsafe.Pointer(a))))
+}
+
+//func (e *allegro.Event) GetEvent() *AudioRecorderEvent {
+//	return (*AudioRecorderEvent)(unsafe.Pointer(C.al_get_audio_recorder_event((*C.ALLEGRO_EVENT)(unsafe.Pointer(e)))))
+//}
+
+func (a *AudioRecorder) GetEventSource() *allegro.EventSource {
+	return (*allegro.EventSource)(unsafe.Pointer(C.al_get_audio_recorder_event_source((*C.ALLEGRO_AUDIO_RECORDER)(unsafe.Pointer(a)))))
 }

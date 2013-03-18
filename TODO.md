@@ -1,6 +1,6 @@
 TODO List
 =========
-* Implement addons: audio, font, color, primitives, video
+* Implement addons: font, color, primitives, video
 * Use GO's test facilities.
 * Port some allegro examples.
 * Documentation? (Is it worth copying over the Allegro docs? How will it be maintained?).
@@ -17,6 +17,12 @@ Callbacks not implemented
 * graphics.go -> al_create_custom_bitmap | al_register_bitmap_loader | al_register_bitmap_saver | al_register_bitmap_loader_f | al_register_bitmap_saver_f
 * direct3d.go -> al_d3d_set_release_callback | al_d3d_set_restore_callback
 * audio.go -> al_set_mixer_postprocess_callback
+* audio.go -> al_register_sample_loader
+* audio.go -> al_register_sample_loader_f
+* audio.go -> al_register_sample_saver
+* audio.go -> al_register_sample_saver_f
+* audio.go -> al_register_audio_stream_loader
+* audio.go -> al_register_audio_stream_loader_f
 
 Quirks?
 =======

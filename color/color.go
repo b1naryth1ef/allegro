@@ -6,7 +6,7 @@ package color
 import "C"
 
 import (
-	"allegro"
+	"github.com/tapir/allegro"
 	"unsafe"
 )
 

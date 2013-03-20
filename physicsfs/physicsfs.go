@@ -5,10 +5,10 @@ package physicsfs
 // #include <allegro5/allegro_physfs.h>
 import "C"
 
-func SetPhysfsFileInterface() {
+func SetFileInterface() {
 	C.al_set_physfs_file_interface()
 }
 
-func GetAllegroPhysfsVersion() uint32 {
+func GetVersion() uint32 {
 	return uint32(C.al_get_allegro_physfs_version())
 }

@@ -10,12 +10,12 @@ import (
 	"unsafe"
 )
 
-func OpenMemfile(mem unsafe.Pointer, size int64, mode string) *allegro.File {
+func Open(mem unsafe.Pointer, size int64, mode string) *allegro.File {
 	m := C.CString(mode)
 	defer C.free(unsafe.Pointer(m))
 	return (*allegro.File)(unsafe.Pointer(C.al_open_memfile(mem, C.int64_t(size), m)))
 }
 
-func GetAllegroMemfileVersion() uint32 {
+func GetVersion() uint32 {
 	return uint32(C.al_get_allegro_memfile_version())
 }

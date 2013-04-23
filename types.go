@@ -1,7 +1,6 @@
 package allegro
 
 // #include <allegro5/allegro.h>
-// #include <allegro5/allegro_shader.h>
 // #include "events.h"
 import "C"
 

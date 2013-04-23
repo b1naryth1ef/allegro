@@ -176,7 +176,7 @@ func (d *Display) AcknowledgeDrawingHalt() {
 }
 
 func (d *Display) AcknowledgeDrawingResume() {
-	C.al_acknowledge_drawing_resume((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)), nil)
+	C.al_acknowledge_drawing_resume((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(d)))
 }
 
 /***************/

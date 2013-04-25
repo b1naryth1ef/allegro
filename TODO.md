@@ -32,12 +32,12 @@ Not going to be implemented
 ===========================
 * file.go -> al_fget_ustr -> See utf8.
 * memory -> No need. Go is garbage collected.
-* path -> Ne need. Go has "path" and "filepath" packages.
+* path -> No need. Go has "path" and "filepath" packages.
 * utf8 -> Go supports UTF8. Do we need this?
-* threads -> Ne need. Go has goroutines.
-* time -> Ne need. Go has "time" package.
+* threads -> No need. Go has goroutines.
+* time -> No need. Go has "time" package.
 * misc -> Not applicable.
-* platform.ios platform.android -> Not fully supported by go.
+* platform.ios platform.android -> Not fully supported by Go.
 * main addon -> Not applicable.
 * native dialogs addon -> ?!?
 * al_get_opengl_extension_list | al_get_opengl_proc_address | al_get_d3d_device | al_get_d3d_system_texture | al_get_d3d_video_texture

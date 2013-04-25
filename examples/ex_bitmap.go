@@ -9,9 +9,8 @@ import (
 )
 
 func main() {
-	redraw := true
 	var zoom float32 = 1.0
-
+	redraw := true
 	filename := "data/mysha.pcx"
 
 	if !allegro.Init() {
@@ -30,41 +29,42 @@ func main() {
 	}
 
 	display := allegro.CreateDisplay(640, 480)
+	defer display.Destroy()
 	if display == nil {
 		log.Fatalln("Could not create Display.")
 	}
-
 	display.SetWindowTitle(filename)
 
 	t := time.Now()
 	bitmap := allegro.LoadBitmap(filename)
+	defer bitmap.Destroy()
 	duration := time.Since(t)
 	if bitmap == nil {
 		log.Fatalf("%s not found or failed to load\n", filename)
 	}
-
 	fmt.Printf("Loading took %s\n", duration.String())
 
 	timer := allegro.CreateTimer(1.0 / 30)
+	defer timer.Destroy()
 	if timer == nil {
 		log.Fatalln("Could not create Timer.")
-		display.Destroy()
 	}
 
 	queue := allegro.CreateEventQueue()
+	defer queue.Destroy()
 	if queue == nil {
 		log.Fatalln("Could not create Queue.")
-		display.Destroy()
-		timer.Destroy()
 	}
 	queue.RegisterEventSource(allegro.GetKeyboardEventSource())
 	queue.RegisterEventSource(allegro.GetMouseEventSource())
 	queue.RegisterEventSource(display.GetEventSource())
 	queue.RegisterEventSource(timer.GetEventSource())
+
 	timer.Start()
 
 	for {
 		event := queue.WaitForEvent()
+
 		if event.Type == allegro.EventDisplayOrientation {
 			o := event.DisplayE.Orientation
 			if o == allegro.DisplayOrientation0Degrees {
@@ -127,9 +127,4 @@ func main() {
 			allegro.FlipDisplay()
 		}
 	}
-
-	bitmap.Destroy()
-	display.Destroy()
-	timer.Destroy()
-	queue.Destroy()
 }

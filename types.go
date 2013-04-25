@@ -74,6 +74,7 @@ type MouseEvent struct {
 	Type           uint32
 	Source         *Mouse
 	TimeStamp      float64
+	Disp           *Display
 	X, Y, Z, W     int32
 	Dx, Dy, Dz, Dw int32
 	Button         uint32

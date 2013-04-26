@@ -1,4 +1,4 @@
-package allegro
+package font
 
 // #cgo LDFLAGS: -lallegro_font -lallegro_ttf
 // #include <allegro5/allegro.h>
@@ -6,7 +6,10 @@ package allegro
 // #include <allegro5/allegro_ttf.h>
 import "C"
 
-import "unsafe"
+import (
+	"github.com/tapir/allegro"
+	"unsafe"	
+)
 
 const (
 	AlignLeft   = C.ALLEGRO_ALIGN_LEFT
@@ -34,10 +37,10 @@ func (f *Font) Destroy() {
 	C.al_destroy_font((*C.ALLEGRO_FONT)(unsafe.Pointer(f)))
 }
 
-func (f *Font) DrawText(text string, color *Color, x, y float32, flags int) {
+func (f *Font) DrawText(text string, c *allegro.Color, x, y float32, flags int) {
 	t := C.CString(text)
 	defer C.free(unsafe.Pointer(t))
-	C.al_draw_text((*C.ALLEGRO_FONT)(unsafe.Pointer(f)), (C.ALLEGRO_COLOR)(*color), C.float(x), C.float(y), C.int(flags), t)
+	C.al_draw_text((*C.ALLEGRO_FONT)(unsafe.Pointer(f)), *((*C.ALLEGRO_COLOR)(unsafe.Pointer(c))), C.float(x), C.float(y), C.int(flags), t)
 }
 
 func (f *Font) TextWidth(text string) int {

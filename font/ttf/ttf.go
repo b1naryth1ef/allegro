@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	NoKerning = C.ALLEGRO_TTF_NO_KERNING
+	NoKerning  = C.ALLEGRO_TTF_NO_KERNING
 	Monochrome = C.ALLEGRO_TTF_MONOCHROME
 	NoAutohint = C.ALLEGRO_TTF_NO_AUTOHINT
 )

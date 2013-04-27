@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/tapir/allegro"
 	"github.com/tapir/allegro/imageio"
-	"fmt"
 	"log"
 	"time"
 )

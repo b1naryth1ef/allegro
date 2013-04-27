@@ -70,12 +70,12 @@ type Voice C.ALLEGRO_VOICE
 type Recorder C.ALLEGRO_AUDIO_RECORDER
 
 type RecorderEvent struct {
-	Type      uint32
-	Source    *Recorder
-	TimeStamp float64
+	Type          uint32
+	Source        *Recorder
+	TimeStamp     float64
 	internalDescr *C.ALLEGRO_USER_EVENT_DESCRIPTOR
-	Buffer unsafe.Pointer
-	Samples uint32
+	Buffer        unsafe.Pointer
+	Samples       uint32
 }
 
 /********************/

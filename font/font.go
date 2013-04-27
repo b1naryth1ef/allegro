@@ -11,9 +11,9 @@ import (
 )
 
 const (
-	AlignLeft   = C.ALLEGRO_ALIGN_LEFT
-	AlignCentre = C.ALLEGRO_ALIGN_CENTRE
-	AlignRight  = C.ALLEGRO_ALIGN_RIGHT
+	AlignLeft    = C.ALLEGRO_ALIGN_LEFT
+	AlignCentre  = C.ALLEGRO_ALIGN_CENTRE
+	AlignRight   = C.ALLEGRO_ALIGN_RIGHT
 	AlignInteger = C.ALLEGRO_ALIGN_INTEGER
 )
 

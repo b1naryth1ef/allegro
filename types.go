@@ -3,8 +3,6 @@ package allegro
 // #include <allegro5/allegro.h>
 import "C"
 
-import "unsafe"
-
 // config.go
 type Config C.ALLEGRO_CONFIG
 type ConfigEntry C.ALLEGRO_CONFIG_ENTRY
@@ -32,12 +30,7 @@ type Color C.ALLEGRO_COLOR
 
 type Bitmap C.ALLEGRO_BITMAP
 
-type LockedRegion struct {
-	Data      unsafe.Pointer
-	Format    int32
-	Pitch     int32
-	PixelSize int32
-}
+type LockedRegion C.ALLEGRO_LOCKED_REGION
 
 // joystick.go
 type Joystick C.ALLEGRO_JOYSTICK

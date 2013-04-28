@@ -353,3 +353,27 @@ func (b *Bitmap) SaveF(fp *File, ident string) bool {
 func SetRenderState(state uint32, value int32) {
 	C.al_set_render_state(C.ALLEGRO_RENDER_STATE(state), C.int(value))
 }
+
+/************************/
+/* LockedRegion getters */
+/************************/
+
+func (l *LockedRegion) Data() unsafe.Pointer {
+	lc := (*C.ALLEGRO_LOCKED_REGION)(unsafe.Pointer(l))
+	return unsafe.Pointer(lc.data)
+}
+
+func (l *LockedRegion) Format() int32 {
+	lc := (*C.ALLEGRO_LOCKED_REGION)(unsafe.Pointer(l))
+	return int32(lc.format)
+}
+
+func (l *LockedRegion) Pitch() int32 {
+	lc := (*C.ALLEGRO_LOCKED_REGION)(unsafe.Pointer(l))
+	return int32(lc.pitch)
+}
+
+func (l *LockedRegion) PixelSize() int32 {
+	lc := (*C.ALLEGRO_LOCKED_REGION)(unsafe.Pointer(l))
+	return int32(lc.pixel_size)
+}

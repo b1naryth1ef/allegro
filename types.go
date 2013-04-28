@@ -25,12 +25,7 @@ type File C.ALLEGRO_FILE
 type FsEntry C.ALLEGRO_FS_ENTRY
 
 // fullscreen.go
-type DisplayMode struct {
-	Width       int32
-	Height      int32
-	Format      int32
-	RefreshRate int32
-}
+type DisplayMode C.ALLEGRO_DISPLAY_MODE
 
 // graphics.go
 type Color C.ALLEGRO_COLOR

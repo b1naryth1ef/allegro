@@ -50,16 +50,7 @@ type Mouse C.ALLEGRO_MOUSE
 
 type MouseCursor C.ALLEGRO_MOUSE_CURSOR
 
-type MouseState struct {
-	X        int32
-	Y        int32
-	Z        int32
-	W        int32
-	moreAxes [C.ALLEGRO_MOUSE_MAX_EXTRA_AXES]int32
-	Buttons  int32
-	pressure int32
-	disp     *Display
-}
+type MouseState C.ALLEGRO_MOUSE_STATE
 
 // shader.go
 type Shader C.ALLEGRO_SHADER

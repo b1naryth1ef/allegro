@@ -100,3 +100,52 @@ func GrabMouse(display *Display) bool {
 func UngrabMouse() bool {
 	return bool(C.al_ungrab_mouse())
 }
+
+/**********************/
+/* MouseState getters */
+/**********************/
+
+func (m *MouseState) X() int32 {
+	mc := (*C.ALLEGRO_MOUSE_STATE)(unsafe.Pointer(m))
+	return int32(mc.x)
+}
+
+func (m *MouseState) Y() int32 {
+	mc := (*C.ALLEGRO_MOUSE_STATE)(unsafe.Pointer(m))
+	return int32(mc.y)
+}
+
+func (m *MouseState) Z() int32 {
+	mc := (*C.ALLEGRO_MOUSE_STATE)(unsafe.Pointer(m))
+	return int32(mc.z)
+}
+
+func (m *MouseState) W() int32 {
+	mc := (*C.ALLEGRO_MOUSE_STATE)(unsafe.Pointer(m))
+	return int32(mc.w)
+}
+
+func (m *MouseState) MoreAxes() []int32 {
+	mc := (*C.ALLEGRO_MOUSE_STATE)(unsafe.Pointer(m))
+	length := int(C.ALLEGRO_MOUSE_MAX_EXTRA_AXES)
+	axes := make([]int32, length)
+	for i := 0; i < length; i++ {
+		axes[i] = int32(mc.more_axes[i])
+	}
+	return axes
+}
+
+func (m *MouseState) Buttons() int32 {
+	mc := (*C.ALLEGRO_MOUSE_STATE)(unsafe.Pointer(m))
+	return int32(mc.buttons)
+}
+
+func (m *MouseState) Pressure() float32 {
+	mc := (*C.ALLEGRO_MOUSE_STATE)(unsafe.Pointer(m))
+	return float32(mc.pressure)
+}
+
+func (m *MouseState) Display() *Display {
+	mc := (*C.ALLEGRO_MOUSE_STATE)(unsafe.Pointer(m))
+	return (*Display)(unsafe.Pointer(mc.display))
+}

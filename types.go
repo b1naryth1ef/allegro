@@ -58,6 +58,9 @@ type Shader C.ALLEGRO_SHADER
 // state.go
 type State C.ALLEGRO_STATE
 
+// time.go
+type Timeout C.ALLEGRO_TIMEOUT
+
 // timer.go
 type Timer C.ALLEGRO_TIMER
 

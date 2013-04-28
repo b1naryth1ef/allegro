@@ -111,7 +111,7 @@ func main() {
 				zoom /= 1.1
 			}
 			if u == 'f' {
-				zoom = float32(display.GetWidth()) / float32(display.GetHeight())
+				zoom = float32(display.GetWidth()) / float32(bitmap.GetWidth())
 			}
 		}
 		if event.Type() == allegro.EventTimer {

@@ -65,8 +65,8 @@ func main() {
 	for {
 		event := queue.WaitForEvent()
 
-		if event.Type == allegro.EventDisplayOrientation {
-			o := event.DisplayE.Orientation
+		if event.Type() == allegro.EventDisplayOrientation {
+			o := event.DisplayOrientation()
 			if o == allegro.DisplayOrientation0Degrees {
 				fmt.Println("0 degrees")
 			} else if o == allegro.DisplayOrientation90Degrees {
@@ -81,38 +81,40 @@ func main() {
 				fmt.Println("Face down")
 			}
 		}
-		if event.Type == allegro.EventDisplayClose {
+		if event.Type() == allegro.EventDisplayClose {
 			fmt.Println("Closing.")
 			break
 		}
-		if event.Type == allegro.EventMouseButtonDown {
-			fmt.Println("Mouse down + ", event.MouseE.Button)
+		if event.Type() == allegro.EventMouseButtonDown {
+			fmt.Println("Mouse down + ", event.MouseButton())
 		}
-		if event.Type == allegro.EventMouseButtonUp {
-			fmt.Println("Mouse up + ", event.MouseE.Button)
+		if event.Type() == allegro.EventMouseButtonUp {
+			fmt.Println("Mouse up + ", event.MouseButton())
 		}
-		if event.Type == allegro.EventKeyChar {
-			fmt.Println("Keycode + ", event.KeyboardE.Keycode)
-			fmt.Println("UniChar + ", event.KeyboardE.UniChar)
+		if event.Type() == allegro.EventKeyChar {
+			k := event.KeyboardKeycode()
+			u := event.KeyboardUnichar()
+			fmt.Println("Keycode + ", k)
+			fmt.Println("Unichar + ", u)
 
-			if event.KeyboardE.Keycode == allegro.KeyEscape {
+			if k == allegro.KeyEscape {
 				fmt.Println("Closing (Escape key).")
 				break
 			}
-			if event.KeyboardE.UniChar == '1' {
+			if u == '1' {
 				zoom = 1
 			}
-			if event.KeyboardE.UniChar == '+' {
+			if u == '+' {
 				zoom *= 1.1
 			}
-			if event.KeyboardE.UniChar == '-' {
+			if u == '-' {
 				zoom /= 1.1
 			}
-			if event.KeyboardE.UniChar == 'f' {
+			if u == 'f' {
 				zoom = float32(display.GetWidth()) / float32(display.GetHeight())
 			}
 		}
-		if event.Type == allegro.EventTimer {
+		if event.Type() == allegro.EventTimer {
 			redraw = true
 		}
 

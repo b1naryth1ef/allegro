@@ -72,6 +72,4 @@ type TouchState C.ALLEGRO_TOUCH_STATE
 type TouchInputState C.ALLEGRO_TOUCH_INPUT_STATE
 
 //transformation.go
-type Transform struct {
-	M [4][4]float32
-}
+type Transform C.ALLEGRO_TRANSFORM

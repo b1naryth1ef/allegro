@@ -89,3 +89,18 @@ func GetProjection(display *Display) *Transform {
 func (t *Transform) SetProjection(display *Display) {
 	C.al_set_projection_transform((*C.ALLEGRO_DISPLAY)(unsafe.Pointer(display)), (*C.ALLEGRO_TRANSFORM)(unsafe.Pointer(t)))
 }
+
+/*********************/
+/* Transform getters */
+/*********************/
+
+func (t *Transform) M() [4][4]float32 {
+	var m [4][4]float32
+	tc := (*C.ALLEGRO_TRANSFORM)(unsafe.Pointer(t))
+	for i := 0; i < 4; i++ {
+		for j := 0; j < 4; j++ {
+			m[i][j] = float32(tc.m[i][j])
+		}
+	}
+	return m
+}

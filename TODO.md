@@ -36,7 +36,6 @@ Not going to be implemented
 * path -> No need. Go has "path" and "filepath" packages.
 * utf8 -> Go supports UTF8. Do we need this?
 * threads -> No need. Go has goroutines.
-* time -> No need. Go has "time" package.
 * misc -> Not applicable.
 * platform.ios platform.android -> Not fully supported by Go.
 * main addon -> Not applicable.

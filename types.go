@@ -43,12 +43,7 @@ type Keyboard C.ALLEGRO_KEYBOARD
 type KeyboardState C.ALLEGRO_KEYBOARD_STATE
 
 // monitor.go
-type MonitorInfo struct {
-	X1 int32
-	Y1 int32
-	X2 int32
-	Y2 int32
-}
+type MonitorInfo C.ALLEGRO_MONITOR_INFO
 
 // mouse.go
 type Mouse C.ALLEGRO_MOUSE

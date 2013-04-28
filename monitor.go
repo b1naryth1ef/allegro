@@ -22,3 +22,27 @@ func GetMonitorInfo(adapter int32) (bool, *MonitorInfo) {
 func GetNumVideoAdapters() int32 {
 	return int32(C.al_get_num_video_adapters())
 }
+
+/***********************/
+/* MonitorInfo getters */
+/***********************/
+
+func (m *MonitorInfo) X1() int32 {
+	mc := (*C.ALLEGRO_MONITOR_INFO)(unsafe.Pointer(m))
+	return int32(mc.x1)
+}
+
+func (m *MonitorInfo) Y1() int32 {
+	mc := (*C.ALLEGRO_MONITOR_INFO)(unsafe.Pointer(m))
+	return int32(mc.y1)
+}
+
+func (m *MonitorInfo) X2() int32 {
+	mc := (*C.ALLEGRO_MONITOR_INFO)(unsafe.Pointer(m))
+	return int32(mc.x2)
+}
+
+func (m *MonitorInfo) Y2() int32 {
+	mc := (*C.ALLEGRO_MONITOR_INFO)(unsafe.Pointer(m))
+	return int32(mc.y2)
+}

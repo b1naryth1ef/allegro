@@ -55,17 +55,17 @@ func main() {
 		}
 
 		event := queue.WaitForEvent()
-		if event.Type == allegro.EventDisplayResize {
+		if event.Type() == allegro.EventDisplayResize {
 			display.AcknowledgeResize()
 			redraw = true
 		}
-		if event.Type == allegro.EventDisplayExpose {
+		if event.Type() == allegro.EventDisplayExpose {
 			redraw = true
 		}
-		if event.Type == allegro.EventKeyDown && event.KeyboardE.Keycode == allegro.KeyEscape {
+		if event.Type() == allegro.EventKeyDown && event.KeyboardKeycode() == allegro.KeyEscape {
 			break
 		}
-		if event.Type == allegro.EventDisplayClose {
+		if event.Type() == allegro.EventDisplayClose {
 			break
 		}
 	}

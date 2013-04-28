@@ -126,17 +126,17 @@ func main() {
 			update(bmp)
 			allegro.ClearToColor(allegro.MapRgbF(0, 0, 0))
 			bmp.DrawTinted(allegro.MapRgbaF(1, 1, 1, 0.5), bmpX, bmpY, bmpFlag)
-			font.DrawText(text, allegro.MapRgbaF(1, 1, 1, 0.5), 0, 0, 0)
+			font.DrawText(allegro.MapRgbaF(1, 1, 1, 0.5), 0, 0, 0, text)
 			allegro.FlipDisplay()
 			redraw = false
 		}
 
 		event := queue.WaitForEvent()
-		switch event.Type {
+		switch event.Type() {
 		case allegro.EventKeyDown:
-			if event.KeyboardE.Keycode == allegro.KeyEscape {
+			if event.KeyboardKeycode() == allegro.KeyEscape {
 				done = true
-			} else if event.KeyboardE.Keycode == allegro.KeySpace {
+			} else if event.KeyboardKeycode() == allegro.KeySpace {
 				if bmp == memBmp {
 					bmp = dispBmp
 					text = "Display bitmap (space to change)"
